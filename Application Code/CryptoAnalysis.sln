@@ -11,13 +11,26 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Host Applications", "Host A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{BD1CDE66-7134-4B1B-BD0D-602256C13962}"
 EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Crypto.Analysis.Backend.Web", "src\Host Applications\Crypto.Analysis.Backend.Web\Crypto.Analysis.Backend.Web.pyproj", "{B6FCEB88-9825-4079-AB30-C723E385CD2D}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B6FCEB88-9825-4079-AB30-C723E385CD2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6FCEB88-9825-4079-AB30-C723E385CD2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6FCEB88-9825-4079-AB30-C723E385CD2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6FCEB88-9825-4079-AB30-C723E385CD2D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{DE39FA8C-D539-48C9-9D3B-53611CF36365} = {FBA5E432-D563-416B-B643-A14DBE3ED292}
 		{BD1CDE66-7134-4B1B-BD0D-602256C13962} = {FBA5E432-D563-416B-B643-A14DBE3ED292}
+		{B6FCEB88-9825-4079-AB30-C723E385CD2D} = {DE39FA8C-D539-48C9-9D3B-53611CF36365}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {891A415C-7721-49FB-BEFA-72084DB7014C}

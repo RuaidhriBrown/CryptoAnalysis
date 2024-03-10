@@ -39,32 +39,31 @@ services:
       - prometheus
 
   # crytpo-analysis-ui: The primary endpoint is http://localhost:5001. Health status can be checked at http://localhost:5001/health. Metrics can be checked at http://localhost:5001/metrics
-  crytpo-analysis-ui:
-    build: 
-      context: ../Application Code
-      dockerfile: ##
-    ports:
-      - "5001:8080"
-    environment:
-      - ASPNETCORE_URLS=http://*:8080
-      - OTEL_EXPORTER_ZIPKIN_ENDPOINT=http://zipkin:9411/api/v2/spans
-      - SeqEndpoint=http://seq:80
-      - Serilog__WriteTo__2__Name=Seq
-      - Serilog__WriteTo__2__Args__ServerUrl=http://seq:80
-      - Serilog__WriteTo__2__Args__RestrictedToMinimumLevel=Debug
-    depends_on:
-      - "zipkin"
-      - "seq"
+  # crytpo-analysis-ui:
+  #   build: 
+  #     context: ../Application Code
+  #     dockerfile: ##
+  #   ports:
+  #     - "5001:8080"
+  #   environment:
+  #     - ASPNETCORE_URLS=http://*:8080
+  #     - OTEL_EXPORTER_ZIPKIN_ENDPOINT=http://zipkin:9411/api/v2/spans
+  #     - SeqEndpoint=http://seq:80
+  #     - Serilog__WriteTo__2__Name=Seq
+  #     - Serilog__WriteTo__2__Args__ServerUrl=http://seq:80
+  #     - Serilog__WriteTo__2__Args__RestrictedToMinimumLevel=Debug
+  #   depends_on:
+  #     - "zipkin"
+  #     - "seq"
 
   # crytpo-analysis-backend: The primary endpoint is http://localhost:5050/. Health status can be checked at http://localhost:5050/health. Metrics can be checked at http://localhost:5050/metrics
   crytpo-analysis-backend:
     build: 
       context: ../Application Code
-      dockerfile: ##
+      dockerfile: ../Application Code\src\Host Applications\Crypto.Analysis.Backend.Web\Dockerfile
     ports:
-      - "5050:8080"
+      - "4449:8080"
     environment:
-      - ASPNETCORE_URLS=http://*:8080
       - OTEL_EXPORTER_ZIPKIN_ENDPOINT=http://zipkin:9411/api/v2/spans
       - SeqEndpoint=http://seq:80
       - Serilog__WriteTo__2__Name=Seq

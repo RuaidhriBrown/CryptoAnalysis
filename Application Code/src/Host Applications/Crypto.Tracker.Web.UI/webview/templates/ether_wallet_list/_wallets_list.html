@@ -1,0 +1,236 @@
+<div class="container-fluid">
+    <form id="search-form" method="GET" action="">
+        <div class="form-group">
+            <label for="search">Search by Address:</label>
+            <input type="text" id="search" name="search" class="form-control" value="{{ request.GET.search }}">
+        </div>
+        <div class="form-group">
+            <label for="filters">Select Stats to Display:</label>
+            <div class="form-check inline-checkbox">
+                <input type="checkbox" class="form-check-input" id="show_total_sent" name="show_total_sent" {% if request.GET.show_total_sent %}checked{% endif %}>
+                <label class="form-check-label" for="show_total_sent">Total Sent Transactions</label>
+            </div>
+            <div class="form-check inline-checkbox">
+                <input type="checkbox" class="form-check-input" id="show_total_received" name="show_total_received" {% if request.GET.show_total_received %}checked{% endif %}>
+                <label class="form-check-label" for="show_total_received">Total Received Transactions</label>
+            </div>
+            <div class="form-check inline-checkbox">
+                <input type="checkbox" class="form-check-input" id="show_unique_sent" name="show_unique_sent" {% if request.GET.show_unique_sent %}checked{% endif %}>
+                <label class="form-check-label" for="show_unique_sent">Unique Sent Addresses</label>
+            </div>
+            <div class="form-check inline-checkbox">
+                <input type="checkbox" class="form-check-input" id="show_unique_received" name="show_unique_received" {% if request.GET.show_unique_received %}checked{% endif %}>
+                <label class="form-check-label" for="show_unique_received">Unique Received Addresses</label>
+            </div>
+            <div class="form-check inline-checkbox">
+                <input type="checkbox" class="form-check-input" id="show_ether_sent" name="show_ether_sent" {% if request.GET.show_ether_sent %}checked{% endif %}>
+                <label class="form-check-label" for="show_ether_sent">Total Ether Sent</label>
+            </div>
+            <div class="form-check inline-checkbox">
+                <input type="checkbox" class="form-check-input" id="show_ether_received" name="show_ether_received" {% if request.GET.show_ether_received %}checked{% endif %}>
+                <label class="form-check-label" for="show_ether_received">Total Ether Received</label>
+            </div>
+            <div class="form-check inline-checkbox">
+                <input type="checkbox" class="form-check-input" id="show_erc20_sent" name="show_erc20_sent" {% if request.GET.show_erc20_sent %}checked{% endif %}>
+                <label class="form-check-label" for="show_erc20_sent">Total ERC20 Sent</label>
+            </div>
+            <div class="form-check inline-checkbox">
+                <input type="checkbox" class="form-check-input" id="show_erc20_received" name="show_erc20_received" {% if request.GET.show_erc20_received %}checked{% endif %}>
+                <label class="form-check-label" for="show_erc20_received">Total ERC20 Received</label>
+            </div>
+            <div class="form-check inline-checkbox">
+                <input type="checkbox" class="form-check-input" id="show_last_updated" name="show_last_updated" {% if request.GET.show_last_updated %}checked{% endif %}>
+                <label class="form-check-label" for="show_last_updated">Last Updated</label>
+            </div>
+            <div class="form-check inline-checkbox">
+                <input type="checkbox" class="form-check-input" id="show_notes" name="show_notes" {% if request.GET.show_notes %}checked{% endif %}>
+                <label class="form-check-label" for="show_notes">Notes</label>
+            </div>
+            <div class="form-check inline-checkbox">
+                <input type="checkbox" class="form-check-input" id="show_owner" name="show_owner" {% if request.GET.show_owner %}checked{% endif %}>
+                <label class="form-check-label" for="show_owner">Owner</label>
+            </div>
+            <div class="form-check inline-checkbox">
+                <input type="checkbox" class="form-check-input" id="show_believed_illicit" name="show_believed_illicit" {% if request.GET.show_believed_illicit %}checked{% endif %}>
+                <label class="form-check-label" for="show_believed_illicit">Believed Illicit</label>
+            </div>
+            <div class="form-check inline-checkbox">
+                <input type="checkbox" class="form-check-input" id="show_confirmed_illicit" name="show_confirmed_illicit" {% if request.GET.show_confirmed_illicit %}checked{% endif %}>
+                <label class="form-check-label" for="show_confirmed_illicit">Confirmed Illicit</label>
+            </div>
+            <div class="form-check inline-checkbox">
+                <input type="checkbox" class="form-check-input" id="show_believed_crime" name="show_believed_crime" {% if request.GET.show_believed_crime %}checked{% endif %}>
+                <label class="form-check-label" for="show_believed_crime">Believed Crime</label>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Apply Filters</button>
+    </form>
+
+    <form id="order-form" method="GET" action="">
+        <!-- Hidden inputs to preserve filter values -->
+        <input type="hidden" id="order_search" name="search" value="{{ request.GET.search }}">
+        <input type="hidden" id="order_show_total_sent" name="show_total_sent" {% if request.GET.show_total_sent %}value="on" {% endif %}>
+        <input type="hidden" id="order_show_total_received" name="show_total_received" {% if request.GET.show_total_received %}value="on" {% endif %}>
+        <input type="hidden" id="order_show_unique_sent" name="show_unique_sent" {% if request.GET.show_unique_sent %}value="on" {% endif %}>
+        <input type="hidden" id="order_show_unique_received" name="show_unique_received" {% if request.GET.show_unique_received %}value="on" {% endif %}>
+        <input type="hidden" id="order_show_ether_sent" name="show_ether_sent" {% if request.GET.show_ether_sent %}value="on" {% endif %}>
+        <input type="hidden" id="order_show_ether_received" name="show_ether_received" {% if request.GET.show_ether_received %}value="on" {% endif %}>
+        <input type="hidden" id="order_show_erc20_sent" name="show_erc20_sent" {% if request.GET.show_erc20_sent %}value="on" {% endif %}>
+        <input type="hidden" id="order_show_erc20_received" name="show_erc20_received" {% if request.GET.show_erc20_received %}value="on" {% endif %}>
+        <input type="hidden" id="order_show_last_updated" name="show_last_updated" {% if request.GET.show_last_updated %}value="on" {% endif %}>
+        <input type="hidden" id="order_show_notes" name="show_notes" {% if request.GET.show_notes %}value="on" {% endif %}>
+        <input type="hidden" id="order_show_owner" name="show_owner" {% if request.GET.show_owner %}value="on" {% endif %}>
+        <input type="hidden" id="order_show_believed_illicit" name="show_believed_illicit" {% if request.GET.show_believed_illicit %}value="on" {% endif %}>
+        <input type="hidden" id="order_show_confirmed_illicit" name="show_confirmed_illicit" {% if request.GET.show_confirmed_illicit %}value="on" {% endif %}>
+        <input type="hidden" id="order_show_believed_crime" name="show_believed_crime" {% if request.GET.show_believed_crime %}value="on" {% endif %}>
+        <div class="form-group">
+            <label for="order_by">Order By:</label>
+            <select id="order_by" name="order_by" class="form-control">
+                <option value="address" {% if request.GET.order_by == 'address' %}selected{% endif %}>Address</option>
+                <option value="total_sent_transactions" {% if request.GET.order_by == 'total_sent_transactions' %}selected{% endif %}>Total Sent Transactions</option>
+                <option value="total_received_transactions" {% if request.GET.order_by == 'total_received_transactions' %}selected{% endif %}>Total Received Transactions</option>
+                <option value="unique_sent_addresses" {% if request.GET.order_by == 'unique_sent_addresses' %}selected{% endif %}>Unique Sent Addresses</option>
+                <option value="unique_received_addresses" {% if request.GET.order_by == 'unique_received_addresses' %}selected{% endif %}>Unique Received Addresses</option>
+                <option value="total_ether_sent" {% if request.GET.order_by == 'total_ether_sent' %}selected{% endif %}>Total Ether Sent</option>
+                <option value="total_ether_received" {% if request.GET.order_by == 'total_ether_received' %}selected{% endif %}>Total Ether Received</option>
+                <option value="total_erc20_sent" {% if request.GET.order_by == 'total_erc20_sent' %}selected{% endif %}>Total ERC20 Sent</option>
+                <option value="total_erc20_received" {% if request.GET.order_by == 'total_erc20_received' %}selected{% endif %}>Total ERC20 Received</option>
+                <option value="last_analyzed" {% if request.GET.order_by == 'last_analyzed' %}selected{% endif %}>Last Analyzed</option>
+                <option value="notes" {% if request.GET.order_by == 'notes' %}selected{% endif %}>Notes</option>
+                <option value="owner" {% if request.GET.order_by == 'owner' %}selected{% endif %}>Owner</option>
+                <option value="believed_illicit" {% if request.GET.order_by == 'believed_illicit' %}selected{% endif %}>Believed Illicit</option>
+                <option value="confirmed_illicit" {% if request.GET.order_by == 'confirmed_illicit' %}selected{% endif %}>Confirmed Illicit</option>
+                <option value="believed_crime" {% if request.GET.order_by == 'believed_crime' %}selected{% endif %}>Believed Crime</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="order_direction">Order Direction:</label>
+            <select id="order_direction" name="order_direction" class="form-control">
+                <option value="asc" {% if request.GET.order_direction == 'asc' %}selected{% endif %}>Ascending</option>
+                <option value="desc" {% if request.GET.order_direction == 'desc' %}selected{% endif %}>Descending</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Apply Order</button>
+    </form>
+
+    <table class="table table-bordered table-striped mt-3">
+        <thead>
+            <tr>
+                <th>Address</th>
+                {% if request.GET.show_total_sent %}
+                <th>Total Sent Transactions</th>{% endif %}
+                {% if request.GET.show_total_received %}
+                <th>Total Received Transactions</th>{% endif %}
+                {% if request.GET.show_unique_sent %}
+                <th>Unique Sent Addresses</th>{% endif %}
+                {% if request.GET.show_unique_received %}
+                <th>Unique Received Addresses</th>{% endif %}
+                {% if request.GET.show_ether_sent %}
+                <th>Total Ether Sent</th>{% endif %}
+                {% if request.GET.show_ether_received %}
+                <th>Total Ether Received</th>{% endif %}
+                {% if request.GET.show_erc20_sent %}
+                <th>Total ERC20 Sent</th>{% endif %}
+                {% if request.GET.show_erc20_received %}
+                <th>Total ERC20 Received</th>{% endif %}
+                {% if request.GET.show_last_updated %}
+                <th>Last Updated</th>{% endif %}
+                {% if request.GET.show_notes %}
+                <th>Notes</th>{% endif %}
+                {% if request.GET.show_owner %}
+                <th>Owner</th>{% endif %}
+                {% if request.GET.show_believed_illicit %}
+                <th>Believed Illicit</th>{% endif %}
+                {% if request.GET.show_confirmed_illicit %}
+                <th>Confirmed Illicit</th>{% endif %}
+                {% if request.GET.show_believed_crime %}
+                <th>Believed Crime</th>{% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for wallet in page_obj %}
+            <tr>
+                <td rowspan="{{ wallet.analyses.count|add:1 }}"><a href="{% url 'wallet_details' wallet.address %}">{{ wallet.address }}</a></td>
+                {% if request.GET.show_total_sent %}
+                <td rowspan="{{ wallet.analyses.count|add:1 }}">{{ wallet.total_sent_transactions|default_if_none:"" }}</td>{% endif %}
+                {% if request.GET.show_total_received %}
+                <td rowspan="{{ wallet.analyses.count|add:1 }}">{{ wallet.total_received_transactions|default_if_none:"" }}</td>{% endif %}
+                {% if request.GET.show_unique_sent %}
+                <td rowspan="{{ wallet.analyses.count|add:1 }}">{{ wallet.unique_sent_addresses|default_if_none:"" }}</td>{% endif %}
+                {% if request.GET.show_unique_received %}
+                <td rowspan="{{ wallet.analyses.count|add:1 }}">{{ wallet.unique_received_addresses|default_if_none:"" }}</td>{% endif %}
+                {% if request.GET.show_ether_sent %}
+                <td rowspan="{{ wallet.analyses.count|add:1 }}">{{ wallet.total_ether_sent|default_if_none:"" }}</td>{% endif %}
+                {% if request.GET.show_ether_received %}
+                <td rowspan="{{ wallet.analyses.count|add:1 }}">{{ wallet.total_ether_received|default_if_none:"" }}</td>{% endif %}
+                {% if request.GET.show_erc20_sent %}
+                <td rowspan="{{ wallet.analyses.count|add:1 }}">{{ wallet.total_erc20_sent|default_if_none:"" }}</td>{% endif %}
+                {% if request.GET.show_erc20_received %}
+                <td rowspan="{{ wallet.analyses.count|add:1 }}">{{ wallet.total_erc20_received|default_if_none:"" }}</td>{% endif %}
+                {% if request.GET.show_last_updated %}
+                <td rowspan="{{ wallet.analyses.count|add:1 }}">{{ wallet.last_updated|default_if_none:"" }}</td>{% endif %}
+            </tr>
+
+            <!-- Analysis-specific rows -->
+            {% for analysis in wallet.analyses.all %}
+            <tr>
+                {% if request.GET.show_last_updated %}
+                <td>{{ analysis.wallet.last_updated|default_if_none:"" }}</td>{% endif %}
+                {% if request.GET.show_notes %}
+                <td>{{ analysis.updating_note|default_if_none:"" }}</td>{% endif %}
+                {% if request.GET.show_owner %}
+                <td>{{ analysis.owner|default_if_none:"" }}</td>{% endif %}
+                {% if request.GET.show_believed_illicit %}
+                <td>{{ analysis.believed_illicit|default_if_none:"" }}</td>{% endif %}
+                {% if request.GET.show_confirmed_illicit %}
+                <td>{{ analysis.confirmed_illicit|default_if_none:"" }}</td>{% endif %}
+                {% if request.GET.show_believed_crime %}
+                <td>{{ analysis.believed_crime|default_if_none:"" }}</td>{% endif %}
+            </tr>
+            {% endfor %}
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+            <a href="?page=1{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">previous</a>
+            {% endif %}
+            <span class="current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+</div>
+
+<script>
+    // Save filters as cookies
+    const searchForm = document.getElementById('search-form');
+    searchForm.addEventListener('submit', function (event) {
+        const formData = new FormData(searchForm);
+        formData.forEach((value, key) => {
+            document.cookie = `${key}=${value}; path=/`;
+        });
+    });
+
+    // Load filters from cookies
+    window.addEventListener('load', function () {
+        const cookies = document.cookie.split(';');
+        cookies.forEach(cookie => {
+            const [name, value] = cookie.split('=').map(c => c.trim());
+            const input = document.querySelector(`[name="${name}"]`);
+            if (input) {
+                input.value = value;
+                if (input.type === 'checkbox' && value === 'on') {
+                    input.checked = true;
+                }
+            }
+        });
+    });
+</script>

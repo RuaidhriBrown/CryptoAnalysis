@@ -1,0 +1,43 @@
+<h2>ERC20 Transactions</h2>
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Hash</th>
+            <th>From</th>
+            <th>To</th>
+            <th>Value</th>
+            <th>Token Name</th>
+            <th>Timestamp</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for transaction in transactions %}
+        <tr>
+            <td>{{ transaction.hash }}</td>
+            <td>{{ transaction.from_address }}</td>
+            <td>{{ transaction.to_address }}</td>
+            <td>{{ transaction.value|floatformat:8 }}</td>
+            <td>{{ transaction.token_name }}</td>
+            <td>{{ transaction.timestamp }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if transactions.has_previous %}
+        <a href="?erc20_page=1">&laquo; first</a>
+        <a href="?erc20_page={{ transactions.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ transactions.number }} of {{ transactions.paginator.num_pages }}.
+        </span>
+
+        {% if transactions.has_next %}
+        <a href="?erc20_page={{ transactions.next_page_number }}">next</a>
+        <a href="?erc20_page={{ transactions.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>

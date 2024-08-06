@@ -1,0 +1,136 @@
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <Name>CryptoTracker</Name>
+    <RootNamespace>CryptoTracker</RootNamespace>
+    <WebBrowserPort>8080</WebBrowserPort>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>020cf5c9-c6ec-443a-ab73-fd631a02da66</ProjectGuid>
+    <ProjectHome>.</ProjectHome>
+    <ProjectTypeGuids>{5F0BE9CA-D677-4A4D-8806-6076C0FAAD37};{349c5851-65df-11da-9384-00065b846f21};{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
+    <StartupFile>manage.py</StartupFile>
+    <SearchPath>
+    </SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <LaunchProvider>Django launcher</LaunchProvider>
+    <DjangoSettingsModule>CryptoTracker.settings</DjangoSettingsModule>
+    <WebBrowserUrl>http://localhost</WebBrowserUrl>
+    <OutputPath>.</OutputPath>
+    <SuppressCollectPythonCloudServiceFiles>true</SuppressCollectPythonCloudServiceFiles>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="manage.py" />
+    <Compile Include="CryptoTracker\__init__.py" />
+    <Compile Include="CryptoTracker\settings.py" />
+    <Compile Include="CryptoTracker\urls.py" />
+    <Compile Include="CryptoTracker\wsgi.py" />
+    <Compile Include="webview\signals.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="webview\admin.py" />
+    <Compile Include="webview\apps.py" />
+    <Compile Include="webview\migrations\__init__.py" />
+    <Compile Include="webview\models.py" />
+    <Compile Include="webview\tests.py" />
+    <Compile Include="webview\transaction_utils.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="webview\urls.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="webview\utils.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="webview\views.py" />
+    <Compile Include="webview\__init__.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="requirements.txt" />
+    <Content Include="webview\static\css\styles.css" />
+    <Content Include="webview\static\images\Logo.png" />
+    <Content Include="webview\static\js\myJS.js" />
+    <Content Include="webview\templates\cfdg-view.html" />
+    <Content Include="webview\templates\ether_wallet\_analysis.html" />
+    <Content Include="webview\templates\ether_wallet\_erc20_transactions.html" />
+    <Content Include="webview\templates\ether_wallet\_ethereum_transactions.html" />
+    <Content Include="webview\templates\ether_wallet\_force_directed_graph.html" />
+    <Content Include="webview\templates\ether_wallet\_wallet_activity_.html" />
+    <Content Include="webview\templates\ether_wallet_list\_wallets_analysis.html" />
+    <Content Include="webview\templates\ether_wallet_list\_wallets_list.html" />
+    <Content Include="webview\templates\index.html" />
+    <Content Include="webview\templates\layout.html" />
+    <Content Include="webview\templates\login.html" />
+    <Content Include="webview\templates\Profile.html" />
+    <Content Include="webview\templates\Todo.html">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="webview\templates\transactions_by_address.html" />
+    <Content Include="webview\templates\transaction_list.html" />
+    <Content Include="webview\templates\ether_wallet\wallet_details.html" />
+    <Content Include="webview\templates\ether_wallet_list\Wallet_List.html" />
+    <Content Include="webview\templates\ether_wallet\_wallet_stats.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="CryptoTracker\" />
+    <Folder Include="webview\" />
+    <Folder Include="webview\migrations\" />
+    <Folder Include="webview\static\" />
+    <Folder Include="webview\static\images\" />
+    <Folder Include="webview\templates\" />
+    <Folder Include="webview\static\css\" />
+    <Folder Include="webview\static\js\" />
+    <Folder Include="webview\templates\ether_wallet\" />
+    <Folder Include="webview\templates\ether_wallet_list\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.Django.targets" />
+  <!-- Specify pre- and post-build commands in the BeforeBuild and 
+       AfterBuild targets below. -->
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <AutoAssignPort>True</AutoAssignPort>
+          <UseCustomServer>True</UseCustomServer>
+          <CustomServerUrl>http://localhost</CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}" User="">
+        <WebProjectProperties>
+          <StartPageUrl>
+          </StartPageUrl>
+          <StartAction>CurrentPage</StartAction>
+          <AspNetDebugging>True</AspNetDebugging>
+          <SilverlightDebugging>False</SilverlightDebugging>
+          <NativeDebugging>False</NativeDebugging>
+          <SQLDebugging>False</SQLDebugging>
+          <ExternalProgram>
+          </ExternalProgram>
+          <StartExternalURL>
+          </StartExternalURL>
+          <StartCmdLineArguments>
+          </StartCmdLineArguments>
+          <StartWorkingDirectory>
+          </StartWorkingDirectory>
+          <EnableENC>False</EnableENC>
+          <AlwaysStartWebServerOnDebug>False</AlwaysStartWebServerOnDebug>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

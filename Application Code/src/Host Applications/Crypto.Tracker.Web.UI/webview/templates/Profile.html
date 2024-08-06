@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Profile</h2>
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Hello, {{ user.username }}!</h5>
+            <p class="card-text">Email: {{ user.email }}</p>
+            <p class="card-text">First Name: {{ user.first_name }}</p>
+            <p class="card-text">Last Name: {{ user.last_name }}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

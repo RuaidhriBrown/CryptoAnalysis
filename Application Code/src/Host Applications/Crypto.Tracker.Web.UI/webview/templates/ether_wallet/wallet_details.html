@@ -1,0 +1,79 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Wallet for {{ address }}
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h1>Wallet for {{ address }}</h1>
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="stats-tab" data-toggle="tab" href="#stats" role="tab" aria-controls="stats" aria-selected="true">Wallet Stats</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="activity-tab" data-toggle="tab" href="#activity" role="tab" aria-controls="activity" aria-selected="true">Activity</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="transactions-tab" data-toggle="tab" href="#transactions" role="tab" aria-controls="transactions" aria-selected="false">Ethereum Transactions</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="erc20-tab" data-toggle="tab" href="#erc20" role="tab" aria-controls="erc20" aria-selected="false">ERC20 Transactions</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="graph-tab" data-toggle="tab" href="#graph-tab-content" role="tab" aria-controls="graph-tab-content" aria-selected="false">Graph</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="update-tab" data-toggle="tab" href="#update" role="tab" aria-controls="update" aria-selected="false">Update Datasets</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="analysis-tab" data-toggle="tab" href="#analysis" role="tab" aria-controls="analysis" aria-selected="false">Analysis</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="linked-wallets-tab" data-toggle="tab" href="#linked-wallets" role="tab" aria-controls="linked-wallets" aria-selected="false">Linked Wallets</a>
+        </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="stats" role="tabpanel" aria-labelledby="stats-tab">
+            {% include 'ether_wallet/_wallet_stats.html' %}
+        </div>
+        <div class="tab-pane fade" id="activity" role="tabpanel" aria-labelledby="activity-tab">
+            {% include 'ether_wallet/_wallet_activity_.html' %}
+        </div>
+        <div class="tab-pane fade" id="transactions" role="tabpanel" aria-labelledby="transactions-tab">
+            {% include 'ether_wallet/_ethereum_transactions.html' with transactions=page_obj %}
+        </div>
+        <div class="tab-pane fade" id="erc20" role="tabpanel" aria-labelledby="erc20-tab">
+            {% include 'ether_wallet/_erc20_transactions.html' with transactions=erc20_page_obj %}
+        </div>
+        <div class="tab-pane fade" id="graph-tab-content" role="tabpanel" aria-labelledby="graph-tab">
+            {% include 'ether_wallet/_force_directed_graph.html' %}
+        </div>
+        <div class="tab-pane fade" id="update" role="tabpanel" aria-labelledby="update-tab">
+            <form method="post" action="{% url 'update_datasets' address=address %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Update Datasets</button>
+            </form>
+            <p>Last Ethereum Update: {{ last_ethereum_update }}</p>
+            <p>Last ERC20 Update: {{ last_erc20_update }}</p>
+            <p>Earliest Last Update: {{ earliest_last_update }}</p>
+            <form method="post" action="{% url 'download_linked_wallets' address=address %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Download Data for Analysis</button>
+            </form>
+            <p>Expected Time to Complete: {{ expected_time }} seconds</p>
+        </div>
+        <div class="tab-pane fade" id="analysis" role="tabpanel" aria-labelledby="analysis-tab">
+            {% include 'ether_wallet/_analysis.html' %}
+        </div>
+        <div class="tab-pane fade" id="linked-wallets" role="tabpanel" aria-labelledby="linked-wallets-tab">
+            <h2>Linked Wallets</h2>
+            <ul>
+                {% for linked_wallet in linked_wallets %}
+                <li><a href="{% url 'wallet_details' linked_wallet %}">{{ linked_wallet }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

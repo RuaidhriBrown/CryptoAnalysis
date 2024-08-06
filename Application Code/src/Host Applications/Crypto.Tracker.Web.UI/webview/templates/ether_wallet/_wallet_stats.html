@@ -1,0 +1,146 @@
+<div class="container">
+    <style>
+        .graph img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .graph {
+            margin-bottom: 20px;
+        }
+
+        .table-responsive {
+            margin-bottom: 20px;
+        }
+    </style>
+
+    <h2>Wallet Stats</h2>
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Metric</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Average minutes between sent transactions</td>
+                    <td>{{ wallet_stats.avg_min_between_sent_tnx }}</td>
+                </tr>
+                <tr>
+                    <td>Average minutes between received transactions</td>
+                    <td>{{ wallet_stats.avg_min_between_received_tnx }}</td>
+                </tr>
+                <tr>
+                    <td>Time difference between first and last transactions (minutes)</td>
+                    <td>{{ wallet_stats.time_diff_between_first_and_last }}</td>
+                </tr>
+                <tr>
+                    <td>Total sent transactions</td>
+                    <td>{{ wallet_stats.sent_tnx }}</td>
+                </tr>
+                <tr>
+                    <td>Total received transactions</td>
+                    <td>{{ wallet_stats.received_tnx }}</td>
+                </tr>
+                <tr>
+                    <td>Unique addresses sent to</td>
+                    <td>{{ wallet_stats.unique_sent_to_addresses }}</td>
+                </tr>
+                <tr>
+                    <td>Unique addresses received from</td>
+                    <td>{{ wallet_stats.unique_received_from_addresses }}</td>
+                </tr>
+                <tr>
+                    <td>Minimum value received (ETH)</td>
+                    <td>{{ wallet_stats.min_val_received }}</td>
+                </tr>
+                <tr>
+                    <td>Maximum value received (ETH)</td>
+                    <td>{{ wallet_stats.max_val_received }}</td>
+                </tr>
+                <tr>
+                    <td>Average value received (ETH)</td>
+                    <td>{{ wallet_stats.avg_val_received }}</td>
+                </tr>
+                <tr>
+                    <td>Minimum value sent (ETH)</td>
+                    <td>{{ wallet_stats.min_val_sent }}</td>
+                </tr>
+                <tr>
+                    <td>Maximum value sent (ETH)</td>
+                    <td>{{ wallet_stats.max_val_sent }}</td>
+                </tr>
+                <tr>
+                    <td>Average value sent (ETH)</td>
+                    <td>{{ wallet_stats.avg_val_sent }}</td>
+                </tr>
+                <tr>
+                    <td>Total Ether sent (ETH)</td>
+                    <td>{{ wallet_stats.total_ether_sent }}</td>
+                </tr>
+                <tr>
+                    <td>Total Ether received (ETH)</td>
+                    <td>{{ wallet_stats.total_ether_received }}</td>
+                </tr>
+                <tr>
+                    <td>Total Ether balance (ETH)</td>
+                    <td>{{ wallet_stats.total_ether_balance }}</td>
+                </tr>
+                <tr>
+                    <td>Total ERC20 transactions</td>
+                    <td>{{ total_erc20_transactions }}</td>
+                </tr>
+                <tr>
+                    <td>Total ERC20 tokens received</td>
+                    <td>{{ wallet_stats.total_erc20_received }}</td>
+                </tr>
+                <tr>
+                    <td>Total ERC20 tokens sent</td>
+                    <td>{{ wallet_stats.total_erc20_sent }}</td>
+                </tr>
+                <tr>
+                    <td>Unique ERC20 addresses sent to</td>
+                    <td>{{ wallet_stats.unique_sent_token_addresses }}</td>
+                </tr>
+                <tr>
+                    <td>Unique ERC20 addresses received from</td>
+                    <td>{{ wallet_stats.unique_received_token_addresses }}</td>
+                </tr>
+                <tr>
+                    <td>Most sent token type</td>
+                    <td>{{ wallet_stats.most_sent_token_type }}</td>
+                </tr>
+                <tr>
+                    <td>Most received token type</td>
+                    <td>{{ wallet_stats.most_received_token_type }}</td>
+                </tr>
+                <tr>
+                    <th>Estimated Time Zone</th>
+                    <td>{{ estimated_timezone }}</td>
+                </tr>
+                <tr>
+                    <th>Peak Transaction Hour (UTC)</th>
+                    <td>{{ peak_hour }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>Transaction Graphs</h3>
+    <div class="graph">
+        <h4>Transactions per Hour</h4>
+        <img src="{{ graph_paths.hourly_plot }}" alt="Transactions per Hour">
+    </div>
+    <div class="graph">
+        <h4>Transactions per Day</h4>
+        <img src="{{ graph_paths.daily_plot }}" alt="Transactions per Day">
+    </div>
+    <div class="graph">
+        <h4>Transactions per Week</h4>
+        <img src="{{ graph_paths.weekly_plot }}" alt="Transactions per Week">
+    </div>
+</div>

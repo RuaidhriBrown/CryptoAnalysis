@@ -1,0 +1,167 @@
+<h2>Analysis</h2>
+
+<!-- Update Form -->
+<form id="analysis-form">
+    <div class="form-group">
+        <label for="filter-date">Update wallets not updated since:</label>
+        <input type="date" class="form-control" id="filter-date">
+    </div>
+    <div class="form-group form-check">
+        <input type="checkbox" class="form-check-input" id="update-all">
+        <label class="form-check-label" for="update-all">Update all wallets</label>
+    </div>
+    <button type="button" id="update-wallets" class="btn btn-primary">Update wallets</button>
+</form>
+
+<div id="progress" style="display:none;">
+    <div class="progress">
+        <div class="progress-bar" role="progressbar" style="width: 0%;" id="progress-bar">0%</div>
+    </div>
+    <p id="progress-text">Starting download...</p>
+</div>
+
+<!-- Analysis Sections -->
+<div class="analysis-section mt-4">
+    <!-- Money Laundering Analysis -->
+    <h3>Money Laundering</h3>
+    <ul>
+        <li>
+            Value Analysis: Identify large transactions or smaller repeated transactions to avoid detection.
+            <button type="button" class="btn btn-secondary btn-sm run-analysis" data-analysis-type="value_analysis">Run</button>
+        </li>
+        <li>
+            Transaction Frequency: Measure fast-in and fast-out transaction activity typical of money laundering.
+            <button type="button" class="btn btn-secondary btn-sm run-analysis" data-analysis-type="transaction_frequency">Run</button>
+        </li>
+        <li>
+            Account Analysis: Analyze accounts that frequently transfer out most of their received funds.
+            <button type="button" class="btn btn-secondary btn-sm run-analysis" data-analysis-type="account_analysis">Run</button>
+        </li>
+        <li>
+            Graph Network Analysis: Assess network density to identify dense transaction activities among wallets.
+            <button type="button" class="btn btn-secondary btn-sm run-analysis" data-analysis-type="graph_network_analysis">Run</button>
+        </li>
+        <li>
+            Closeness Centrality Measure: Calculate closeness centrality of nodes to identify key players in the laundering process.
+            <button type="button" class="btn btn-secondary btn-sm run-analysis" data-analysis-type="closeness_centrality">Run</button>
+        </li>
+    </ul>
+</div>
+
+<div class="analysis-section mt-4">
+    <!-- Ransomware Detection Analysis -->
+    <h3>Ransomware Detection</h3>
+    <ul>
+        <li>
+            Transaction Tracing: Trace the flow of funds from ransom payments to cash-out points.
+            <button type="button" class="btn btn-secondary btn-sm run-analysis" data-analysis-type="transaction_tracing">Run</button>
+        </li>
+        <li>
+            Clustering and Co-Spending Analysis: Identify address clusters frequently co-spent in transactions.
+            <button type="button" class="btn btn-secondary btn-sm run-analysis" data-analysis-type="clustering_analysis">Run</button>
+        </li>
+        <li>
+            Micropayment Techniques: Send small payments to known addresses and monitor fund movements.
+            <button type="button" class="btn btn-secondary btn-sm run-analysis" data-analysis-type="micropayment_techniques">Run</button>
+        </li>
+        <li>
+            Real-Time Monitoring: Set up systems to monitor transactions involving known addresses.
+            <button type="button" class="btn btn-secondary btn-sm run-analysis" data-analysis-type="real_time_monitoring">Run</button>
+        </li>
+        <li>
+            Centrality Measures: Calculate centrality measures to identify key nodes in ransomware operations.
+            <button type="button" class="btn btn-secondary btn-sm run-analysis" data-analysis-type="centrality_measures">Run</button>
+        </li>
+    </ul>
+</div>
+
+<div class="analysis-section mt-4">
+    <!-- Phishing Detection Analysis -->
+    <h3>Phishing Detection</h3>
+    <ul>
+        <li>
+            Graph-Based Detection: Use graph classification where nodes are accounts and edges are transactions.
+            <button type="button" class="btn btn-secondary btn-sm run-analysis" data-analysis-type="graph_based_detection">Run</button>
+        </li>
+        <li>
+            End-to-End Learning with PDGNN: Implement PDGNN to extract features and classify phishing accounts.
+            <button type="button" class="btn btn-secondary btn-sm run-analysis" data-analysis-type="pdgnn">Run</button>
+        </li>
+        <li>
+            Lightweight Network Construction: Use BFS and random walk-based sampling to construct transaction networks.
+            <button type="button" class="btn btn-secondary btn-sm run-analysis" data-analysis-type="lightweight_network_construction">Run</button>
+        </li>
+        <li>
+            Subgraph Sampling and Pooling: Focus on phishing-relevant subgraphs with pooling strategies.
+            <button type="button" class="btn btn-secondary btn-sm run-analysis" data-analysis-type="subgraph_sampling">Run</button>
+        </li>
+        <li>
+            Comparative Analysis with Baseline Methods: Compare PDGNN performance with baseline methods like DeepWalk and Node2Vec.
+            <button type="button" class="btn btn-secondary btn-sm run-analysis" data-analysis-type="comparative_analysis">Run</button>
+        </li>
+    </ul>
+</div>
+
+<script>
+document.getElementById('update-wallets').addEventListener('click', function() {
+    const progressBar = document.getElementById('progress-bar');
+    const progressText = document.getElementById('progress-text');
+    const progressDiv = document.getElementById('progress');
+    const filterDate = document.getElementById('filter-date').value;
+    const updateAll = document.getElementById('update-all').checked;
+    progressDiv.style.display = 'block';
+
+    fetch('{% url "update_wallets" %}', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            filter_date: filterDate,
+            update_all: updateAll
+        })
+    }).then(response => response.json())
+      .then(data => {
+          if (data.status === 'completed') {
+              progressBar.style.width = '100%';
+              progressBar.innerHTML = '100%';
+              progressText.innerHTML = 'Download completed in ' + data.elapsed_time + ' seconds.';
+          } else {
+              progressText.innerHTML = 'Download failed.';
+          }
+      }).catch(error => {
+          console.error('Error:', error);
+          progressText.innerHTML = 'An error occurred.';
+      });
+});
+
+// Event listener for running specific analysis
+document.querySelectorAll('.run-analysis').forEach(button => {
+    button.addEventListener('click', function() {
+        const analysisType = this.getAttribute('data-analysis-type');
+        alert(`Running analysis: ${analysisType}`);
+        // Add logic to trigger the specific analysis
+        fetch('{% url "run_analysis" %}', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                analysis_type: analysisType
+            })
+        }).then(response => response.json())
+          .then(data => {
+              if (data.status === 'completed') {
+                  alert('Analysis completed: ' + analysisType);
+              } else {
+                  alert('Analysis failed: ' + analysisType);
+              }
+          }).catch(error => {
+              console.error('Error:', error);
+              alert('An error occurred during analysis: ' + analysisType);
+          });
+    });
+});
+</script>

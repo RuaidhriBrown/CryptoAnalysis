@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clustered Force-Directed Graph</title>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <style>
+        .graph-container {
+            display: flex;
+            margin: 0;
+            width: 100%;
+            height: 600px;
+        }
+
+        #graph {
+            flex: 1;
+        }
+
+        .node {
+            stroke: #fff;
+            stroke-width: 1.5px;
+            cursor: pointer;
+        }
+
+        .link {
+            stroke: #999;
+            stroke-opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="graph-container">
+        <div id="graph"></div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const width = document.getElementById('graph').clientWidth;
+            const height = document.getElementById('graph').clientHeight;
+            const color = d3.scaleOrdinal(d3.schemeCategory10);
+            let previousAddress = null;
+
+            const svg = d3.select("#graph")
+                .append("svg")
+                .attr("viewBox", `0 0 ${width} ${height}`)
+                .attr("preserveAspectRatio", "xMidYMid meet")
+                .classed("svg-content-responsive", true);
+
+            const simulation = d3.forceSimulation()
+                .force("link", d3.forceLink().id(d => d.id).distance(50))
+                .force("charge", d3.forceManyBody().strength(-200))
+                .force("center", d3.forceCenter(width / 2, height / 2))
+                .force("x", d3.forceX())
+                .force("y", d3.forceY());
+
+            function fetchAndRender(address) {
+                console.log(`Fetching data for address: ${address}`);
+                d3.json(`/account/${address}/`).then(transactions => {
+                    const nodes = {};
+                    const links = [];
+                    const transactionCounts = {};
+                    let transactionCount = 0;
+
+                    transactions.forEach(tx => {
+                        if (!transactionCounts[tx.from]) transactionCounts[tx.from] = 0;
+                        if (!transactionCounts[tx.to]) transactionCounts[tx.to] = 0;
+                        transactionCounts[tx.from]++;
+                        transactionCounts[tx.to]++;
+                    });
+
+                    transactions.forEach(tx => {
+                        nodes[tx.from] = { id: tx.from, group: tx.from === address ? 1 : (tx.from === previousAddress ? 3 : 2) };
+                        nodes[tx.to] = { id: tx.to, group: tx.to === address ? 1 : (tx.to === previousAddress ? 3 : 2) };
+                        links.push({ source: tx.from, target: tx.to });
+                        transactionCount++;
+                    });
+
+                    const nodeData = Object.values(nodes);
+
+                    svg.selectAll("*").remove();
+
+                    const link = svg.append("g")
+                        .attr("class", "links")
+                        .selectAll("line")
+                        .data(links)
+                        .enter().append("line")
+                        .attr("class", "link");
+
+                    const node = svg.append("g")
+                        .attr("class", "nodes")
+                        .selectAll("g")
+                        .data(nodeData)
+                        .enter().append("g")
+                        .attr("class", "node")
+                        .on("click", function (event, d) {
+                            fetchAndRender(d.id);
+                        });
+
+                    node.append("circle")
+                        .attr("r", d => d.id === address ? 40 : Math.sqrt(transactionCounts[d.id]) + 5)
+                        .attr("fill", d => d.id === address ? "green" : (d.id === previousAddress ? "purple" : color(d.group)));
+
+                    simulation.nodes(nodeData);
+                    simulation.force("link").links(links);
+
+                    simulation.alpha(1).restart();
+
+                    simulation.on("tick", () => {
+                        link
+                            .attr("x1", d => d.source.x)
+                            .attr("y1", d => d.source.y)
+                            .attr("x2", d => d.target.x)
+                            .attr("y2", d => d.target.y);
+
+                        node
+                            .attr("transform", d => `translate(${d.x},${d.y})`);
+                    });
+
+                    previousAddress = address;
+                });
+            }
+
+            fetchAndRender("{{ address }}");  // Use the passed address from Django context
+        });
+    </script>
+</body>
+</html>

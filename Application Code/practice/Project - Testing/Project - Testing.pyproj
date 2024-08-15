@@ -1,0 +1,134 @@
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>2664c312-12cb-479e-be0d-a5cfc1296ba7</ProjectGuid>
+    <ProjectHome>.</ProjectHome>
+    <StartupFile>moneyLaundering\old\m.Money_Laundering.py</StartupFile>
+    <SearchPath>
+    </SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <Name>Project - Testing</Name>
+    <RootNamespace>Project - Testing</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Analysis\1.5 Community_Detection.py" />
+    <Compile Include="Analysis\2. Centrality_Measures.py" />
+    <Compile Include="Analysis\2.5.0 Centrality_Measures.py" />
+    <Compile Include="Analysis\4. Temporal Analysis.py" />
+    <Compile Include="Analysis\6. Smart_Contract_Interactions.py" />
+    <Compile Include="Analysis\5. Token_Flow_Analysis.py" />
+    <Compile Include="Analysis\4. Anomaly_Detection.py" />
+    <Compile Include="Analysis\3. transaction_patterns.py" />
+    <Compile Include="Analysis\7. Cross-Chain_Analysis.py" />
+    <Compile Include="Analysis\1. Community_Detection.py" />
+    <Compile Include="datasets\ethereum\combineTransactionsEr20.py" />
+    <Compile Include="database\import_er20.py" />
+    <Compile Include="database\import_transactions.py" />
+    <Compile Include="data\combineCSVFiles.py" />
+    <Compile Include="data\getUniqueAddresses.py" />
+    <Compile Include="data\requestAllContractDetailsRange.py" />
+    <Compile Include="data\requestAllAccountTransactionsRange.py" />
+    <Compile Include="data\requestAllER20Range1.py" />
+    <Compile Include="data\requestTransactions.py" />
+    <Compile Include="data\summariseCSV.py" />
+    <Compile Include="datasets\findDateOfDataset tranactions.py" />
+    <Compile Include="moneyLaundering\old\m.Money_Laundering.py" />
+    <Compile Include="moneyLaundering\Money Laundering analysis knn.py" />
+    <Compile Include="moneyLaundering\old\AggregatedWalletDataAnalysis1.py" />
+    <Compile Include="moneyLaundering\old\TransactionDataAnalysis1.py" />
+    <Compile Include="moneyLaundering\smurfing_clustering.py" />
+    <Compile Include="moneyLaundering\transactionsChunks.py" />
+    <Compile Include="Phishing-ML\advanced\GNN Phishing Detection Model v2.py" />
+    <Compile Include="Phishing-ML\advanced\GNN Phishing Detection Model v3.py" />
+    <Compile Include="Phishing-ML\advanced\GNN Phishing Detection Model.py" />
+    <Compile Include="Phishing-ML\archieved\er20s\TensorFlowKeras.py" />
+    <Compile Include="Phishing-ML\archieved\er20s\TensorFlowKerasValidated.py" />
+    <Compile Include="Phishing-ML\archieved\GridSearch-LO.py" />
+    <Compile Include="Phishing-ML\archieved\GridSearch.py" />
+    <Compile Include="Phishing-ML\archieved\Isolation Forest.py" />
+    <Compile Include="Phishing-ML\archieved\RandomForest+moneyLaundering.py" />
+    <Compile Include="Phishing-ML\archieved\RandomForest.py" />
+    <Compile Include="Phishing-ML\archieved\RandomForestHyperparametered.py" />
+    <Compile Include="Phishing-ML\archieved\transactions\start.py" />
+    <Compile Include="Phishing-ML\archieved\transactions\TensorFlowKeras.py" />
+    <Compile Include="Phishing-ML\archieved\transactions\TensorFlowKerasValidation.py" />
+    <Compile Include="Phishing-ML\LR-machine learning.py" />
+    <Compile Include="Project___Testing.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="datasets\bitcoin\elliptic_txs_classes.csv" />
+    <Content Include="datasets\bitcoin\elliptic_txs_edgelist.csv" />
+    <Content Include="datasets\bitcoin\elliptic_txs_features.csv" />
+    <Content Include="datasets\ethereum\analysis\analysis_summary_combined_er20.xlsx" />
+    <Content Include="datasets\ethereum\analysis\analysis_summary_combined_transactions.xlsx" />
+    <Content Include="datasets\ethereum\analysis\analysis_summary_transaction_dataset_even.xlsx" />
+    <Content Include="datasets\ethereum\combined_er20.csv" />
+    <Content Include="datasets\ethereum\combined_transactions.csv" />
+    <Content Include="datasets\ethereum\er20_collection\Flag_0_erc20_transactions_0_1.csv" />
+    <Content Include="datasets\ethereum\er20_collection\Flag_0_erc20_transactions_0_99.csv" />
+    <Content Include="datasets\ethereum\er20_collection\Flag_0_erc20_transactions_100_599.csv" />
+    <Content Include="datasets\ethereum\er20_collection\Flag_0_erc20_transactions_1100_2178.csv" />
+    <Content Include="datasets\ethereum\er20_collection\Flag_0_erc20_transactions_2179.csv" />
+    <Content Include="datasets\ethereum\er20_collection\Flag_0_erc20_transactions_600_1099.csv" />
+    <Content Include="datasets\ethereum\er20_collection\Flag_1_erc20_transactions_0_999.csv" />
+    <Content Include="datasets\ethereum\er20_collection\Flag_1_erc20_transactions_1000_2179.csv" />
+    <Content Include="datasets\ethereum\transactions\Flag_0_erc20_transactions_0_9.csv" />
+    <Content Include="datasets\ethereum\transactions\Flag_0_transactions_0_100.csv" />
+    <Content Include="datasets\ethereum\transactions\Flag_0_transactions_101_201.csv" />
+    <Content Include="datasets\ethereum\transactions\Flag_0_transactions_1501_2000.csv" />
+    <Content Include="datasets\ethereum\transactions\Flag_0_transactions_2001_2179.csv" />
+    <Content Include="datasets\ethereum\transactions\Flag_0_transactions_201_300.csv" />
+    <Content Include="datasets\ethereum\transactions\Flag_0_transactions_301_400.csv" />
+    <Content Include="datasets\ethereum\transactions\Flag_0_transactions_401_900.csv" />
+    <Content Include="datasets\ethereum\transactions\Flag_0_transactions_901_1500.csv" />
+    <Content Include="datasets\ethereum\transactions\Flag_1_transactions_0_99.csv" />
+    <Content Include="datasets\ethereum\transactions\Flag_1_transactions_101_500.csv" />
+    <Content Include="datasets\ethereum\transactions\Flag_1_transactions_1501_2179.csv" />
+    <Content Include="datasets\ethereum\transactions\Flag_1_transactions_501_1500.csv" />
+    <Content Include="datasets\ethereum\transaction_dataset-original.csv" />
+    <Content Include="datasets\ethereum\transaction_dataset_even.csv" />
+    <Content Include="data\account_collection\transactions_0_100.csv" />
+    <Content Include="data\account_collection\transactions_first_10.csv" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Analysis\" />
+    <Folder Include="datasets\" />
+    <Folder Include="datasets\bitcoin\" />
+    <Folder Include="datasets\ethereum\" />
+    <Folder Include="datasets\ethereum\analysis\" />
+    <Folder Include="datasets\ethereum\er20_collection\" />
+    <Folder Include="datasets\ethereum\transactions\" />
+    <Folder Include="Phishing-ML\" />
+    <Folder Include="Phishing-ML\archieved\er20s\" />
+    <Folder Include="Phishing-ML\archieved\" />
+    <Folder Include="Phishing-ML\archieved\transactions\" />
+    <Folder Include="data\" />
+    <Folder Include="data\account_collection\" />
+    <Folder Include="data\addresses\" />
+    <Folder Include="data\er20_collection\" />
+    <Folder Include="moneyLaundering\" />
+    <Folder Include="database\" />
+    <Folder Include="moneyLaundering\old\" />
+    <Folder Include="Phishing-ML\advanced\" />
+    <Folder Include="results\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
+  <!-- Uncomment the CoreCompile target to enable the Build command in
+       Visual Studio and specify your pre- and post-build commands in
+       the BeforeBuild and AfterBuild targets below. -->
+  <!--<Target Name="CoreCompile" />-->
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+</Project>

@@ -23,6 +23,17 @@ urlpatterns = [
     path('wallets/<str:address>/', views.wallet_details, name='wallet_details'),
     path('wallets/<str:address>/update/', views.update_datasets, name='update_datasets'),
     path('wallets/<str:address>/download_linked_wallets/', views.download_linked_wallets, name='download_linked_wallets'),
+    
+    path('wallets/<int:wallet_id>/update_analysis/', views.update_wallet_analysis, name='update_wallet_analysis'),
+    path('wallets/<int:wallet_id>/add_note/', views.add_wallet_note, name='add_wallet_note'),
+    
+    path('wallets/<int:wallet_id>/run_phishing_analysis_w_wallet/', views.run_phishing_detection_W_wallets, name='run_phishing_analysis_wallet'),
+    path('wallets/<int:wallet_id>/run_phishing_analysis_W_transactions/', views.run_phishing_detection_W_transactions, name='run_phishing_analysis_transactions'),
+    path('wallets/<int:wallet_id>/run_phishing_analysis_W_er20s/', views.run_phishing_detection_W_ER20, name='run_phishing_analysis_er20'),
+    path('wallets/<int:wallet_id>/run_Money_Laundering_detection/', views.run_Money_Laundering_detection, name='run_Money_Laundering_detection'),
+    
+    path('run_phishing_analysis_all_wallets/', views.run_phishing_detection_all_wallets, name='run_phishing_analysis_all_wallets'),
+    
 ]
 
 if settings.DEBUG:

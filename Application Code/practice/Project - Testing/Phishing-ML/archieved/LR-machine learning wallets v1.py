@@ -9,7 +9,7 @@ import networkx as nx
 import seaborn as sns
 
 # Load the Ethereum transaction data
-file_path = 'transaction_dataset.csv'
+file_path = 'datasets/ethereum/transaction_dataset_even.csv'
 transaction_data = pd.read_csv(file_path)
 
 # Trim leading and trailing spaces from column names

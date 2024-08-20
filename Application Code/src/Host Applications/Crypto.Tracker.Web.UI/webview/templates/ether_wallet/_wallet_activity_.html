@@ -1,10 +1,172 @@
-<div class="container">
-    <style>
-        
-    </style>
+<div class="container-fluid">
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="wallet-details-tab" data-toggle="tab" href="#wallet-details" role="tab" aria-controls="wallet-details" aria-selected="true">Wallet Details</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="wallet-notes-tab" data-toggle="tab" href="#wallet-notes" role="tab" aria-controls="wallet-notes" aria-selected="false">Wallet Notes</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="completed-analyses-tab" data-toggle="tab" href="#completed-analyses" role="tab" aria-controls="completed-analyses" aria-selected="false">Completed Analyses</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="time-analyses-tab" data-toggle="tab" href="#time-analyses" role="tab" aria-controls="time-analyses" aria-selected="false">Time Analyses</a>
+        </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <!-- Wallet Details Tab -->
+        <div class="tab-pane fade show active" id="wallet-details" role="tabpanel" aria-labelledby="wallet-details-tab">
+            <h3>Wallet Details</h3>
+            <form method="post" action="{% url 'update_wallet_analysis' wallet.id %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="owner">Owner</label>
+                    <input type="text" class="form-control" id="owner" name="owner" value="{{ wallet_analysis.owner|default:'' }}">
+                </div>
+                <div class="form-group">
+                    <label for="tag">Tag</label>
+                    <input type="text" class="form-control" id="tag" name="tag" value="{{ wallet_analysis.tag|default:'' }}">
+                </div>
+                <div class="form-group">
+                    <label for="believed_illicit_count">Believed Illicit Count</label>
+                    <input type="number" class="form-control" id="believed_illicit_count" name="believed_illicit_count" value="{{ wallet_analysis.believed_illicit_count|default:0 }}">
+                </div>
+                <div class="form-group">
+                    <label for="believed_illicit">Believed Illicit</label>
+                    <select class="form-control" id="believed_illicit" name="believed_illicit">
+                        <option value="False" {% if not wallet_analysis.believed_illicit %}selected{% endif %}>No</option>
+                        <option value="True" {% if wallet_analysis.believed_illicit %}selected{% endif %}>Yes</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="confirmed_illicit">Confirmed Illicit</label>
+                    <select class="form-control" id="confirmed_illicit" name="confirmed_illicit">
+                        <option value="False" {% if not wallet_analysis.confirmed_illicit %}selected{% endif %}>No</option>
+                        <option value="True" {% if wallet_analysis.confirmed_illicit %}selected{% endif %}>Yes</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="believed_crime">Believed Crime</label>
+                    <input type="text" class="form-control" id="believed_crime" name="believed_crime" value="{{ wallet_analysis.believed_crime|default:'' }}">
+                </div>
+                <div class="form-group">
+                    <label for="last_analyzed">Last Analyzed</label>
+                    <input type="text" class="form-control" id="last_analyzed" name="last_analyzed" value="{{ wallet_analysis.last_analyzed|date:'Y-m-d H:i'|default:'' }}" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="updating_note">Notes</label>
+                    <textarea class="form-control" id="updating_note" name="updating_note">{{ wallet_analysis.updating_note|default:'' }}</textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Save Details</button>
+            </form>
+        </div>
 
-    <h2>Wallet Activity</h2>
-    <div>
+        <!-- Wallet Notes Tab -->
+        <div class="tab-pane fade" id="wallet-notes" role="tabpanel" aria-labelledby="wallet-notes-tab">
+            <h3>Wallet Notes</h3>
 
+            <div class="chat-container">
+                {% for note in wallet_notes %}
+                <div class="chat-message {% if note.user == request.user %}right{% else %}left{% endif %}">
+                    <div class="chat-bubble">
+                        <strong>
+                            {% if note.user %}
+                            {{ note.user.username }}
+                            {% else %}
+                            System
+                            {% endif %}
+                        </strong>
+                        <p>{{ note.content }}</p>
+                        <small>{{ note.created_at|date:"Y-m-d H:i" }}</small>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="no-notes">
+                    <p>No notes available yet.</p>
+                </div>
+                {% endfor %}
+            </div>
+
+            <form method="post" action="{% url 'add_wallet_note' wallet.id %}">
+                {% csrf_token %}
+                <div class="form-group mt-4">
+                    <textarea class="form-control" name="content" placeholder="Add a new note..." rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Add Note</button>
+            </form>
+        </div>
+
+
+        <!-- Completed Analyses Tab -->
+        <div class="tab-pane fade" id="completed-analyses" role="tabpanel" aria-labelledby="completed-analyses-tab">
+            <h3>Completed Automatic Analyses</h3>
+
+            <!-- Buttons to run various phishing and money laundering detection analyses -->
+            <div class="mb-3">
+                <form method="post" action="{% url 'run_phishing_analysis_wallet' wallet.id %}" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-warning">Run Wallet Phishing Detection</button>
+                </form>
+
+                <form method="post" action="{% url 'run_phishing_analysis_transactions' wallet.id %}" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-warning">Run Transaction Phishing Detection</button>
+                </form>
+
+                <form method="post" action="{% url 'run_phishing_analysis_er20' wallet.id %}" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-warning">Run ERC20 Phishing Detection</button>
+                </form>
+
+                <!-- New button to run Money Laundering detection -->
+                <form method="post" action="{% url 'run_Money_Laundering_detection' wallet.id %}" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Run Money Laundering Detection</button>
+                </form>
+            </div>
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Analysis Name</th>
+                        <th>Note</th>
+                        <th>Completed At</th>
+                        <th>Concluded Happened</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for analysis in completed_analyses %}
+                    <tr>
+                        <td>{{ analysis.name }}</td>
+                        <td>{{ analysis.note|default:"N/A" }}</td>
+                        <td>{{ analysis.completed_at }}</td>
+                        <td>{{ analysis.concluded_happened|yesno:"Yes,No" }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4">No completed analyses available yet.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+
+        <!-- Completed Analyses Tab -->
+        <div class="tab-pane fade" id="time-analyses" role="tabpanel" aria-labelledby="time-analyses-tab">
+            <h3>Time Analysis</h3>
+            <div class="graph">
+                <h4>Transactions per Hour</h4>
+                <img src="{{ graph_paths.hourly_plot }}" alt="Transactions per Hour">
+            </div>
+            <div class="graph">
+                <h4>Transactions per Day of the Week</h4>
+                <img src="{{ graph_paths.daily_plot }}" alt="Transactions per Day of the Week">
+            </div>
+            <div class="graph">
+                <h4>Transactions per Month</h4>
+                <img src="{{ graph_paths.monthly_plot }}" alt="Transactions per Month">
+            </div>
+        </div>
     </div>
 </div>

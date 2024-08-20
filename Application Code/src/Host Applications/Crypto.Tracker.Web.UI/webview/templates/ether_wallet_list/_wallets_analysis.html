@@ -22,63 +22,14 @@
 
 <!-- Analysis Sections -->
 <div class="analysis-section mt-4">
-    <!-- Money Laundering Analysis -->
-    <h3>Money Laundering</h3>
-    <ul>
-        <li>
-            Value Analysis: Identify large transactions or smaller repeated transactions to avoid detection.
-            <button type="button" class="btn btn-secondary btn-sm run-analysis" data-analysis-type="value_analysis">Run</button>
-        </li>
-        <li>
-            Transaction Frequency: Measure fast-in and fast-out transaction activity typical of money laundering.
-            <button type="button" class="btn btn-secondary btn-sm run-analysis" data-analysis-type="transaction_frequency">Run</button>
-        </li>
-        <li>
-            Account Analysis: Analyze accounts that frequently transfer out most of their received funds.
-            <button type="button" class="btn btn-secondary btn-sm run-analysis" data-analysis-type="account_analysis">Run</button>
-        </li>
-        <li>
-            Graph Network Analysis: Assess network density to identify dense transaction activities among wallets.
-            <button type="button" class="btn btn-secondary btn-sm run-analysis" data-analysis-type="graph_network_analysis">Run</button>
-        </li>
-        <li>
-            Closeness Centrality Measure: Calculate closeness centrality of nodes to identify key players in the laundering process.
-            <button type="button" class="btn btn-secondary btn-sm run-analysis" data-analysis-type="closeness_centrality">Run</button>
-        </li>
-    </ul>
-</div>
-
-<div class="analysis-section mt-4">
-    <!-- Ransomware Detection Analysis -->
-    <h3>Ransomware Detection</h3>
-    <ul>
-        <li>
-            Transaction Tracing: Trace the flow of funds from ransom payments to cash-out points.
-            <button type="button" class="btn btn-secondary btn-sm run-analysis" data-analysis-type="transaction_tracing">Run</button>
-        </li>
-        <li>
-            Clustering and Co-Spending Analysis: Identify address clusters frequently co-spent in transactions.
-            <button type="button" class="btn btn-secondary btn-sm run-analysis" data-analysis-type="clustering_analysis">Run</button>
-        </li>
-        <li>
-            Micropayment Techniques: Send small payments to known addresses and monitor fund movements.
-            <button type="button" class="btn btn-secondary btn-sm run-analysis" data-analysis-type="micropayment_techniques">Run</button>
-        </li>
-        <li>
-            Real-Time Monitoring: Set up systems to monitor transactions involving known addresses.
-            <button type="button" class="btn btn-secondary btn-sm run-analysis" data-analysis-type="real_time_monitoring">Run</button>
-        </li>
-        <li>
-            Centrality Measures: Calculate centrality measures to identify key nodes in ransomware operations.
-            <button type="button" class="btn btn-secondary btn-sm run-analysis" data-analysis-type="centrality_measures">Run</button>
-        </li>
-    </ul>
-</div>
-
-<div class="analysis-section mt-4">
     <!-- Phishing Detection Analysis -->
     <h3>Phishing Detection</h3>
+    <p>The phishing detection process involves using both basic ML methods and advanced GNNs to detect suspicious accounts on the Ethereum blockchain.</p>
     <ul>
+        <li>
+            Basic ML Methods: Process the Aggregated Wallet, Ethereum Transactions, and ERC20 Transactions datasets using standard machine learning techniques.
+            <button type="button" class="btn btn-secondary btn-sm run-analysis" data-analysis-type="basic_ml_methods">Run</button>
+        </li>
         <li>
             Graph-Based Detection: Use graph classification where nodes are accounts and edges are transactions.
             <button type="button" class="btn btn-secondary btn-sm run-analysis" data-analysis-type="graph_based_detection">Run</button>
@@ -98,6 +49,39 @@
         <li>
             Comparative Analysis with Baseline Methods: Compare PDGNN performance with baseline methods like DeepWalk and Node2Vec.
             <button type="button" class="btn btn-secondary btn-sm run-analysis" data-analysis-type="comparative_analysis">Run</button>
+        </li>
+        <!-- New Option to Run Phishing Detection Across All Wallets -->
+        <li>
+            Phishing Detection Across All Wallets
+            <button type="button" class="btn btn-danger btn-sm run-analysis" id="run-phishing-all-wallets">Run</button>
+        </li>
+    </ul>
+</div>
+
+<div class="analysis-section mt-4">
+    <!-- Money Laundering Analysis -->
+    <h3>Money Laundering</h3>
+    <p>The money laundering detection methodology includes analyzing wallet behaviors and transaction patterns that are typical in laundering activities.</p>
+    <ul>
+        <li>
+            Aggregated Wallet Analysis: Identify suspicious wallets based on the total Ether received, Ether sent, and unique addresses involved.
+            <button type="button" class="btn btn-secondary btn-sm run-analysis" data-analysis-type="aggregated_wallet_analysis">Run</button>
+        </li>
+        <li>
+            Fast-In Fast-Out (FIFO) Ratio: Identify wallets that quickly transfer out received funds, a common tactic in laundering.
+            <button type="button" class="btn btn-secondary btn-sm run-analysis" data-analysis-type="fifo_ratio_analysis">Run</button>
+        </li>
+        <li>
+            Small-Volume Transactions: Focus on wallets with numerous small transactions to evade detection.
+            <button type="button" class="btn btn-secondary btn-sm run-analysis" data-analysis-type="small_volume_transactions">Run</button>
+        </li>
+        <li>
+            Dense Transaction Networks: Detect networks of transactions between limited wallets, suggesting coordinated laundering.
+            <button type="button" class="btn btn-secondary btn-sm run-analysis" data-analysis-type="dense_network_analysis">Run</button>
+        </li>
+        <li>
+            ERC20 Token Analysis: Examine token transfers for signs of laundering, such as diversity of tokens and gas efficiency.
+            <button type="button" class="btn btn-secondary btn-sm run-analysis" data-analysis-type="erc20_token_analysis">Run</button>
         </li>
     </ul>
 </div>
@@ -163,5 +147,28 @@ document.querySelectorAll('.run-analysis').forEach(button => {
               alert('An error occurred during analysis: ' + analysisType);
           });
     });
+});
+
+// Event listener for running phishing analysis across all wallets
+document.getElementById('run-phishing-all-wallets').addEventListener('click', function () {
+    if (confirm('Are you sure you want to run phishing analysis for all wallets? This could take some time.')) {
+        fetch('{% url "run_phishing_analysis_all_wallets" %}', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json'
+            }
+        }).then(response => response.json())
+            .then(data => {
+                if (data.status === 'completed') {
+                    alert('Phishing analysis completed for all wallets.');
+                } else {
+                    alert('Phishing analysis failed.');
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred during phishing analysis.');
+            });
+    }
 });
 </script>

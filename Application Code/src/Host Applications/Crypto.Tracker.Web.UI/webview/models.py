@@ -115,6 +115,7 @@ class ERC20Transaction(models.Model):
 
 class Wallet(models.Model):
     address = models.CharField(max_length=42, unique=True)
+    balance = models.DecimalField(max_digits=30, decimal_places=18, null=True, blank=True)
     total_sent_transactions = models.IntegerField(default=0)
     total_received_transactions = models.IntegerField(default=0)
     unique_sent_addresses = models.IntegerField(default=0)
@@ -133,11 +134,12 @@ class Wallet(models.Model):
 
     def __str__(self):
         return self.address
-    
+
 class WalletAnalysis(models.Model):
     wallet = models.ForeignKey(Wallet, on_delete=models.CASCADE, related_name='analyses')
     user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='analyses')
     owner = models.CharField(max_length=255, blank=True, null=True)
+    tag = models.CharField(max_length=255, blank=True, null=True)
     believed_illicit_count = models.IntegerField(default=0)
     believed_illicit = models.BooleanField(default=False)
     confirmed_illicit = models.BooleanField(default=False)
@@ -156,12 +158,59 @@ class WalletAnalysis(models.Model):
     def __str__(self):
         return f"Analysis by {self.user_profile.user.username} on {self.wallet.address}"
 
+    def save(self, *args, **kwargs):
+        # Determine if this is the first time the object is being created
+        is_new = self._state.adding
+        
+        # Call the original save method to save the WalletAnalysis instance
+        super().save(*args, **kwargs)
+
+        if is_new:
+            # Create a system user if it doesn't exist
+            system_user = self.get_or_create_system_user()
+
+            # Create the note content based on the analysis creation
+            note_content = (
+                f"A new Wallet Analysis has been created for {self.wallet.address} by the system."
+            )
+
+            # Create and save the WalletNote associated with this new analysis
+            WalletNote.objects.create(
+                analysis=self,
+                user=system_user,
+                content=note_content,
+                note_type='normal'  # You can define a special type for this, if needed
+            )
+
+    def get_or_create_system_user(self):
+        """Retrieve the 'System' user, creating it if it doesn't exist."""
+        system_role = Role.get_system_role()
+        system_user, created = User.objects.get_or_create(
+            username='System',
+            defaults={'is_active': False}
+        )
+        if created:
+            # Create a user profile associated with the 'System' role
+            UserProfile.objects.create(user=system_user, role=system_role)
+        else:
+            # Ensure the system user has a profile, create it if it does not exist
+            UserProfile.objects.get_or_create(user=system_user, defaults={'role': system_role})
+        
+        return system_user
+
 class WalletNote(models.Model):
+    NOTE_TYPE_CHOICES = [
+        ('completed_analysis', 'Completed Analysis'),
+        ('normal', 'Normal'),
+        # You can add more types if needed in the future
+    ]
+
     analysis = models.ForeignKey(WalletAnalysis, on_delete=models.CASCADE, related_name='notes')
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='notes')
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    note_type = models.CharField(max_length=50, choices=NOTE_TYPE_CHOICES, null=True, blank=True)  # New field for note type
 
     class Meta:
         db_table = 'dev_crypto_tracker"."wallet_note'
@@ -169,12 +218,13 @@ class WalletNote(models.Model):
             models.Index(fields=['analysis']),
             models.Index(fields=['user']),
             models.Index(fields=['created_at']),
+            models.Index(fields=['note_type']),  # Index for note type to enable efficient filtering
         ]
 
     def __str__(self):
-        return f"Note by {self.user} on {self.analysis.wallet.address}"
+        return f"Note by {self.user} on {self.analysis.wallet.address} (Type: {self.get_note_type_display()})"
 
-# New model for Completed Analysis
+
 class CompletedAnalysis(models.Model):
     wallet_analysis = models.ForeignKey(WalletAnalysis, on_delete=models.CASCADE, related_name='completed_analyses')
     name = models.CharField(max_length=255)
@@ -193,3 +243,43 @@ class CompletedAnalysis(models.Model):
 
     def __str__(self):
         return f"{self.name} analysis for {self.wallet_analysis.wallet.address}"
+
+    def save(self, *args, **kwargs):
+        # Call the original save method to save the CompletedAnalysis instance
+        super().save(*args, **kwargs)
+
+        # Ensure the 'System' user exists, or create it
+        system_user = self.get_or_create_system_user()
+
+        # Create the note content based on the analysis details
+        note_content = (
+            f"Completed Analysis: {self.name}\n"
+            f"Concluded Happened: {'Yes' if self.concluded_happened else 'No'}\n"
+            f"Details: {self.note or 'No additional details provided.'}"
+        )
+
+        # Create and save the WalletNote associated with this analysis
+        WalletNote.objects.create(
+            analysis=self.wallet_analysis,
+            user=system_user,
+            content=note_content,
+            note_type='completed_analysis'  # Set the note type to 'completed_analysis'
+        )
+
+    def get_or_create_system_user(self):
+        """Retrieve the 'System' user, creating it if it doesn't exist."""
+        system_role = Role.get_system_role()
+        
+        # Get or create the 'System' user
+        system_user, created = User.objects.get_or_create(
+            username='System',
+            defaults={'is_active': False}
+        )
+
+        # Ensure the 'System' user has a UserProfile, create it if it does not exist
+        UserProfile.objects.get_or_create(
+            user=system_user,
+            defaults={'role': system_role}
+        )
+        
+        return system_user

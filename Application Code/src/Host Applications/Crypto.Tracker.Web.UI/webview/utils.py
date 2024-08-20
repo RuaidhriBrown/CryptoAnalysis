@@ -2,6 +2,9 @@
 # utils.py
 from django.db.models import Count, Q
 
+import matplotlib
+matplotlib.use('Agg')  # Use the Agg backend for rendering plots
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import os
@@ -137,20 +140,28 @@ def generate_wallet_stats_graphs(transactions, wallet_address):
     # Convert timestamp to a datetime format
     data['timestamp'] = pd.to_datetime(data['timestamp'])
     
-    # Filter the dataset for transactions involving the wallet address
+    # Filter the dataset for transactions involving the Address
     filtered_data = data[(data['from_address'] == wallet_address) | (data['to_address'] == wallet_address)]
     
-    # Group by hour, day, and week for the filtered data
+    # Group by hour, day of the week, and month for the filtered data
     filtered_data['hour'] = filtered_data['timestamp'].dt.hour
-    filtered_data['day'] = filtered_data['timestamp'].dt.date
-    filtered_data['week'] = filtered_data['timestamp'].dt.to_period('W').apply(lambda r: r.start_time)
+    filtered_data['day_of_week'] = filtered_data['timestamp'].dt.day_name()
+    filtered_data['month'] = filtered_data['timestamp'].dt.month_name()
     
-    # Create a complete range of hours (0 to 23)
+    # Create a complete range of hours (0 to 23) and days of the week
     hours = pd.DataFrame({'hour': range(24)})
+    days_of_week = pd.DataFrame({'day_of_week': ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']})
     
     # Count transactions per hour
     filtered_hourly_counts = filtered_data.groupby('hour').size().reset_index(name='count')
     filtered_hourly_counts = hours.merge(filtered_hourly_counts, on='hour', how='left').fillna(0)
+    
+    # Count transactions per day of the week
+    filtered_daily_counts = filtered_data.groupby('day_of_week').size().reset_index(name='count')
+    filtered_daily_counts = days_of_week.merge(filtered_daily_counts, on='day_of_week', how='left').fillna(0)
+    
+    # Count transactions per month
+    filtered_monthly_counts = filtered_data.groupby('month').size().reset_index(name='count')
     
     # Analyze peak hours
     peak_hour = filtered_hourly_counts.loc[filtered_hourly_counts['count'].idxmax()]['hour']
@@ -163,12 +174,6 @@ def generate_wallet_stats_graphs(transactions, wallet_address):
         estimated_timezone_offset -= 24
     estimated_timezone = f"UTC{'+' if estimated_timezone_offset >= 0 else ''}{estimated_timezone_offset}"
     
-    # Count transactions per day
-    filtered_daily_counts = filtered_data.groupby('day').size()
-    
-    # Count transactions per week
-    filtered_weekly_counts = filtered_data.groupby('week').size()
-    
     # Define a directory to save the plots
     plots_dir = os.path.join(settings.MEDIA_ROOT, 'plots')
     os.makedirs(plots_dir, exist_ok=True)
@@ -176,7 +181,7 @@ def generate_wallet_stats_graphs(transactions, wallet_address):
     # Plot the number of transactions per hour of the day
     hourly_plot_path = os.path.join(plots_dir, f'{wallet_address}_hourly.png')
     plt.figure(figsize=(12, 6))
-    plt.bar(filtered_hourly_counts['hour'], filtered_hourly_counts['count'])
+    plt.bar(filtered_hourly_counts['hour'], filtered_hourly_counts['count'], color='teal')
     plt.title('Number of Transactions per Hour of the Day')
     plt.xlabel('Hour of the Day')
     plt.ylabel('Number of Transactions')
@@ -184,32 +189,32 @@ def generate_wallet_stats_graphs(transactions, wallet_address):
     plt.savefig(hourly_plot_path)
     plt.close()
     
-    # Plot the number of transactions per day
-    daily_plot_path = os.path.join(plots_dir, f'{wallet_address}_daily.png')
+    # Plot the number of transactions per day of the week
+    daily_plot_path = os.path.join(plots_dir, f'{wallet_address}_day_of_week.png')
     plt.figure(figsize=(12, 6))
-    filtered_daily_counts.plot(kind='line')
-    plt.title('Number of Transactions per Day')
-    plt.xlabel('Date')
+    plt.bar(filtered_daily_counts['day_of_week'], filtered_daily_counts['count'], color='orange')
+    plt.title('Number of Transactions per Day of the Week')
+    plt.xlabel('Day of the Week')
     plt.ylabel('Number of Transactions')
     plt.xticks(rotation=45)
     plt.savefig(daily_plot_path)
     plt.close()
     
-    # Plot the number of transactions per week
-    weekly_plot_path = os.path.join(plots_dir, f'{wallet_address}_weekly.png')
+    # Plot the number of transactions per month
+    monthly_plot_path = os.path.join(plots_dir, f'{wallet_address}_monthly.png')
     plt.figure(figsize=(12, 6))
-    filtered_weekly_counts.plot(kind='line')
-    plt.title('Number of Transactions per Week')
-    plt.xlabel('Week')
+    plt.bar(filtered_monthly_counts['month'], filtered_monthly_counts['count'], color='purple')
+    plt.title('Number of Transactions per Month')
+    plt.xlabel('Month')
     plt.ylabel('Number of Transactions')
     plt.xticks(rotation=45)
-    plt.savefig(weekly_plot_path)
+    plt.savefig(monthly_plot_path)
     plt.close()
     
     return {
         'hourly_plot': os.path.join(settings.MEDIA_URL, 'plots', f'{wallet_address}_hourly.png'),
-        'daily_plot': os.path.join(settings.MEDIA_URL, 'plots', f'{wallet_address}_daily.png'),
-        'weekly_plot': os.path.join(settings.MEDIA_URL, 'plots', f'{wallet_address}_weekly.png'),
+        'daily_plot': os.path.join(settings.MEDIA_URL, 'plots', f'{wallet_address}_day_of_week.png'),
+        'monthly_plot': os.path.join(settings.MEDIA_URL, 'plots', f'{wallet_address}_monthly.png'),
         'estimated_timezone': estimated_timezone,
         'peak_hour': peak_hour
     }

@@ -9,21 +9,21 @@ from sklearn.cluster import DBSCAN
 import matplotlib.pyplot as plt
 
 # Load the unique wallets dataset
-wallets_file_path = 'transaction_dataset_even.csv'
+wallets_file_path = 'datasets/ethereum/transaction_dataset_even.csv'
 wallets_data = pd.read_csv(wallets_file_path)
 
-# Extract the unique list of wallet addresses
+# Extract the unique list of Addresses
 wallet_addresses = wallets_data['Address'].unique()
 
 # Load the transaction dataset
-transaction_file_path = 'combined_transactions.csv'
+transaction_file_path = 'datasets/ethereum/combined_transactions.csv'
 transaction_data = pd.read_csv(transaction_file_path)
 
-# Function to analyze each wallet address for smurfing patterns
+# Function to analyze each Address for smurfing patterns
 def analyze_wallet(wallet_address, data):
     #wallet_address = "0x001eb1e90d25e8c1372c38f2b2a36b49b6634235"
     
-    # Filter transactions related to the wallet address
+    # Filter transactions related to the Address
     clean_data = data[(data['from'] == wallet_address) | (data['to'] == wallet_address)]
 
     # Filter the data to only include transactions where 'FLAG' is equal to '1'
@@ -131,7 +131,7 @@ def analyze_wallet(wallet_address, data):
     else:
         print("No suspicious clusters found.")
 
-# Iterate over each wallet address and perform analysis
+# Iterate over each Address and perform analysis
 for wallet in wallet_addresses:
     analyze_wallet(wallet, transaction_data)
 

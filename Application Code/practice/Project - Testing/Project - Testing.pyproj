@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>2664c312-12cb-479e-be0d-a5cfc1296ba7</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>moneyLaundering\old\m.Money_Laundering.py</StartupFile>
+    <StartupFile>moneyLaundering\LR-machine learning wallets.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -35,13 +35,23 @@
     <Compile Include="database\import_er20.py" />
     <Compile Include="database\import_transactions.py" />
     <Compile Include="data\combineCSVFiles.py" />
-    <Compile Include="data\getUniqueAddresses.py" />
     <Compile Include="data\requestAllContractDetailsRange.py" />
     <Compile Include="data\requestAllAccountTransactionsRange.py" />
-    <Compile Include="data\requestAllER20Range1.py" />
-    <Compile Include="data\requestTransactions.py" />
     <Compile Include="data\summariseCSV.py" />
     <Compile Include="datasets\findDateOfDataset tranactions.py" />
+    <Compile Include="findDateOfDataset3.py" />
+    <Compile Include="moneyLaundering\combine\combine_wallet_list.py" />
+    <Compile Include="moneyLaundering\combine\combineER20.py" />
+    <Compile Include="moneyLaundering\combine\combineTransactions.py" />
+    <Compile Include="moneyLaundering\combine\combine_data.py" />
+    <Compile Include="moneyLaundering\combine\get_balances_for_wallets.py" />
+    <Compile Include="moneyLaundering\DifferentAnalysisMoneyLaundering.py" />
+    <Compile Include="moneyLaundering\fetch_data\getMoneyLaunderingData.py" />
+    <Compile Include="moneyLaundering\fetch_data\getMoneyLaunderingData1Layer.py" />
+    <Compile Include="moneyLaundering\fetch_data\getMoneyLaunderingDataMultiLayer.py" />
+    <Compile Include="moneyLaundering\LR-machine learning er20.py" />
+    <Compile Include="moneyLaundering\LR-machine learning transactions.py" />
+    <Compile Include="moneyLaundering\LR-machine learning wallets.py" />
     <Compile Include="moneyLaundering\old\m.Money_Laundering.py" />
     <Compile Include="moneyLaundering\Money Laundering analysis knn.py" />
     <Compile Include="moneyLaundering\old\AggregatedWalletDataAnalysis1.py" />
@@ -51,18 +61,26 @@
     <Compile Include="Phishing-ML\advanced\GNN Phishing Detection Model v2.py" />
     <Compile Include="Phishing-ML\advanced\GNN Phishing Detection Model v3.py" />
     <Compile Include="Phishing-ML\advanced\GNN Phishing Detection Model.py" />
-    <Compile Include="Phishing-ML\archieved\er20s\TensorFlowKeras.py" />
-    <Compile Include="Phishing-ML\archieved\er20s\TensorFlowKerasValidated.py" />
-    <Compile Include="Phishing-ML\archieved\GridSearch-LO.py" />
-    <Compile Include="Phishing-ML\archieved\GridSearch.py" />
-    <Compile Include="Phishing-ML\archieved\Isolation Forest.py" />
-    <Compile Include="Phishing-ML\archieved\RandomForest+moneyLaundering.py" />
-    <Compile Include="Phishing-ML\archieved\RandomForest.py" />
-    <Compile Include="Phishing-ML\archieved\RandomForestHyperparametered.py" />
-    <Compile Include="Phishing-ML\archieved\transactions\start.py" />
-    <Compile Include="Phishing-ML\archieved\transactions\TensorFlowKeras.py" />
-    <Compile Include="Phishing-ML\archieved\transactions\TensorFlowKerasValidation.py" />
-    <Compile Include="Phishing-ML\LR-machine learning.py" />
+    <Compile Include="Phishing-ML\archieved\LR-machine learning wallets v2.py" />
+    <Compile Include="Phishing-ML\archieved\old\er20s\TensorFlowKeras.py" />
+    <Compile Include="Phishing-ML\archieved\old\er20s\TensorFlowKerasValidated.py" />
+    <Compile Include="Phishing-ML\archieved\old\GridSearch-LO.py" />
+    <Compile Include="Phishing-ML\archieved\old\GridSearch.py" />
+    <Compile Include="Phishing-ML\archieved\old\Isolation Forest.py" />
+    <Compile Include="Phishing-ML\archieved\old\RandomForest+moneyLaundering.py" />
+    <Compile Include="Phishing-ML\archieved\old\RandomForest.py" />
+    <Compile Include="Phishing-ML\archieved\old\RandomForestHyperparametered.py" />
+    <Compile Include="Phishing-ML\archieved\old\transactions\start.py" />
+    <Compile Include="Phishing-ML\archieved\old\transactions\TensorFlowKeras.py" />
+    <Compile Include="Phishing-ML\archieved\old\transactions\TensorFlowKerasValidation.py" />
+    <Compile Include="Phishing-ML\combine_data.py" />
+    <Compile Include="Phishing-ML\LR-machine learning er20 visualisation.py" />
+    <Compile Include="Phishing-ML\LR-machine learning er20.py" />
+    <Compile Include="Phishing-ML\archieved\LR-machine learning transactions.py" />
+    <Compile Include="Phishing-ML\LR-machine learning transactions.py" />
+    <Compile Include="Phishing-ML\archieved\LR-machine learning wallets v1.py" />
+    <Compile Include="Phishing-ML\LR-machine learning wallets v3.py" />
+    <Compile Include="Phishing-ML\testModel.py" />
     <Compile Include="Project___Testing.py" />
   </ItemGroup>
   <ItemGroup>
@@ -99,6 +117,9 @@
     <Content Include="datasets\ethereum\transaction_dataset_even.csv" />
     <Content Include="data\account_collection\transactions_0_100.csv" />
     <Content Include="data\account_collection\transactions_first_10.csv" />
+    <Content Include="results\random_forest_phishing_detector_aggregated.pkl" />
+    <Content Include="results\random_forest_phishing_detector_erc20.pkl" />
+    <Content Include="results\transactions_random_forest_phishing_detector.pkl" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Analysis\" />
@@ -108,10 +129,13 @@
     <Folder Include="datasets\ethereum\analysis\" />
     <Folder Include="datasets\ethereum\er20_collection\" />
     <Folder Include="datasets\ethereum\transactions\" />
+    <Folder Include="moneyLaundering\combine\" />
+    <Folder Include="moneyLaundering\fetch_data\" />
     <Folder Include="Phishing-ML\" />
-    <Folder Include="Phishing-ML\archieved\er20s\" />
+    <Folder Include="Phishing-ML\archieved\old\er20s\" />
     <Folder Include="Phishing-ML\archieved\" />
-    <Folder Include="Phishing-ML\archieved\transactions\" />
+    <Folder Include="Phishing-ML\archieved\old\" />
+    <Folder Include="Phishing-ML\archieved\old\transactions\" />
     <Folder Include="data\" />
     <Folder Include="data\account_collection\" />
     <Folder Include="data\addresses\" />

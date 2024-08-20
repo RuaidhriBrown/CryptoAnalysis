@@ -5,7 +5,7 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.cluster import KMeans
 
 # Load the dataset
-file_path = 'combined_transactions.csv'
+file_path = 'datasets\ethereum\combined_transactions.csv'
 clean_data = pd.read_csv(file_path)
 
 # Filter the data to only include transactions where 'flag' is equal to '1'

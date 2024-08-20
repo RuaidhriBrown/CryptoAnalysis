@@ -18,7 +18,7 @@ import numpy as np
 #### Step 2: Load and Preprocess the Dataset ####
 
 # Load the Ethereum transaction dataset
-eth_transactions = pd.read_csv('combined_transactions.csv')
+eth_transactions = pd.read_csv('datasets/ethereum/combined_transactions.csv')
 
 # Combine the datasets (if necessary)
 transactions = pd.concat([eth_transactions], ignore_index=True)

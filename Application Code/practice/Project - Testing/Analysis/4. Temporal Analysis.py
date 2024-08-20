@@ -11,7 +11,7 @@ data = data.drop(columns=['FLAG'])
 # Convert timestamp to a datetime format
 data['timeStamp'] = pd.to_datetime(data['timeStamp'], unit='s')
 
-# Filter the dataset for transactions involving the first wallet address
+# Filter the dataset for transactions involving the first Address
 first_wallet_address = '0xd24400ae8bfebb18ca49be86258a3c749cf46853'
 filtered_data = data[(data['from'] == first_wallet_address) | (data['to'] == first_wallet_address)]
 
@@ -32,7 +32,7 @@ filtered_weekly_counts = filtered_data.groupby('week').size()
 # Plot the number of transactions per hour of the day
 plt.figure(figsize=(12, 6))
 filtered_hourly_counts.plot(kind='bar')
-plt.title('Number of Transactions per Hour of the Day (First Wallet Address)')
+plt.title('Number of Transactions per Hour of the Day (First Address)')
 plt.xlabel('Hour of the Day')
 plt.ylabel('Number of Transactions')
 plt.xticks(rotation=0)
@@ -41,7 +41,7 @@ plt.show()
 # Plot the number of transactions per day
 plt.figure(figsize=(12, 6))
 filtered_daily_counts.plot(kind='line')
-plt.title('Number of Transactions per Day (First Wallet Address)')
+plt.title('Number of Transactions per Day (First Address)')
 plt.xlabel('Date')
 plt.ylabel('Number of Transactions')
 plt.xticks(rotation=45)
@@ -50,7 +50,7 @@ plt.show()
 # Plot the number of transactions per week
 plt.figure(figsize=(12, 6))
 filtered_weekly_counts.plot(kind='line')
-plt.title('Number of Transactions per Week (First Wallet Address)')
+plt.title('Number of Transactions per Week (First Address)')
 plt.xlabel('Week')
 plt.ylabel('Number of Transactions')
 plt.xticks(rotation=45)

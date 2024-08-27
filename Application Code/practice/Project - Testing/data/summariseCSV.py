@@ -117,7 +117,11 @@ def save_analysis_to_csv(file_path, summary, correlations):
 # Example usage
 # file_path = 'combined_er20.csv'
 # file_path = 'combined_transactions.csv'
-file_path = 'transaction_dataset_even.csv'
+# file_path = 'transaction_dataset_even.csv'
+
+file_path = 'datasets/ethereum/MoneyLaundering/combined_normal_transactions_data.csv'
+# file_path = 'datasets/ethereum/MoneyLaundering/combined_er20_transaction_data.csv'
+# file_path = 'datasets/ethereum/MoneyLaundering/combined_transaction_data.csv'
 
 summary = summarize_csv(file_path)
 correlations = generate_heatmap_and_correlations(file_path)

@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>2664c312-12cb-479e-be0d-a5cfc1296ba7</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>moneyLaundering\LR-machine learning wallets.py</StartupFile>
+    <StartupFile>data\summariseCSV.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>

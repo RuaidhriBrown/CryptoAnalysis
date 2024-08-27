@@ -332,3 +332,6 @@ MockEmisProxy/build_deploy_run.ps1
 /Application Code/src/Host Applications/Crypto.Tracker.Web.UI/media/plots/0xf3ae45d5a0b8efb41444101267b56e6795051fac_daily.png
 /Application Code/src/Host Applications/Crypto.Tracker.Web.UI/media/plots/0xf3ae45d5a0b8efb41444101267b56e6795051fac_hourly.png
 /Application Code/src/Host Applications/Crypto.Tracker.Web.UI/media/plots/0xf3ae45d5a0b8efb41444101267b56e6795051fac_weekly.png
+/Application Code/practice/Project - Testing/datasets/ethereum/MoneyLaundering/analysis/analysis_summary_combined_aggregate.xlsx
+/Application Code/practice/Project - Testing/datasets/ethereum/MoneyLaundering/analysis
+/Application Code/practice/Project - Testing/correlation_heatmap.png

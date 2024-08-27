@@ -335,3 +335,7 @@ MockEmisProxy/build_deploy_run.ps1
 /Application Code/practice/Project - Testing/datasets/ethereum/MoneyLaundering/analysis/analysis_summary_combined_aggregate.xlsx
 /Application Code/practice/Project - Testing/datasets/ethereum/MoneyLaundering/analysis
 /Application Code/practice/Project - Testing/correlation_heatmap.png
+/Application Code/practice/Project - Testing/datasets/ethereum/combined_er20.csv
+/Application Code/practice/Project - Testing/datasets/ethereum/combined_transactions.csv
+/Application Code/practice/Project - Testing/datasets/ethereum/transaction_dataset_even.csv
+/Application Code/practice/Project - Testing/datasets/ethereum/transaction_dataset-original.csv

@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>2664c312-12cb-479e-be0d-a5cfc1296ba7</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>Phishing-ML\LR-machine learning transactions.py</StartupFile>
+    <StartupFile>moneyLaundering\LR-machine learning wallets.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -136,6 +136,8 @@
     <Content Include="datasets\ethereum\transaction_dataset_even.csv" />
     <Content Include="data\account_collection\transactions_0_100.csv" />
     <Content Include="data\account_collection\transactions_first_10.csv" />
+    <Content Include="results\random_forest_moneyLaundering_detector_aggregated.pkl" />
+    <Content Include="results\random_forest_moneyLaundering_detector_aggregated_features.pkl" />
     <Content Include="results\random_forest_moneyLaundering_detector_er20.pkl" />
     <Content Include="results\random_forest_moneyLaundering_detector_er20_features.pkl" />
     <Content Include="results\random_forest_moneyLaundering_detector_transactions.pkl" />

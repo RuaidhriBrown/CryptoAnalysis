@@ -62,14 +62,17 @@
     <Compile Include="webview\__init__.py" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="models\ethereum\moneyLaundering\random_forest_phishing_detector_aggregated.pkl" />
-    <Content Include="models\ethereum\moneyLaundering\random_forest_phishing_detector_aggregated_features.pkl" />
-    <Content Include="models\ethereum\moneyLaundering\random_forest_phishing_detector_erc20.pkl" />
-    <Content Include="models\ethereum\moneyLaundering\random_forest_phishing_detector_erc20_features.pkl" />
-    <Content Include="models\ethereum\moneyLaundering\random_forest_phishing_detector_transactions.pkl" />
-    <Content Include="models\ethereum\moneyLaundering\random_forest_phishing_detector_transactions_features.pkl" />
+    <Content Include="models\ethereum\moneyLaundering\random_forest_moneyLaundering_detector_aggregated.pkl" />
+    <Content Include="models\ethereum\moneyLaundering\random_forest_moneyLaundering_detector_aggregated_features.pkl" />
+    <Content Include="models\ethereum\moneyLaundering\random_forest_moneyLaundering_detector_er20.pkl" />
+    <Content Include="models\ethereum\moneyLaundering\random_forest_moneyLaundering_detector_er20_features.pkl" />
+    <Content Include="models\ethereum\moneyLaundering\random_forest_moneyLaundering_detector_transactions.pkl" />
+    <Content Include="models\ethereum\moneyLaundering\random_forest_moneyLaundering_detector_transactions_features.pkl" />
+    <Content Include="models\ethereum\phishing\random_forest_phishing_detector_transactions.pkl" />
+    <Content Include="models\ethereum\phishing\random_forest_phishing_detector_transactions_features.pkl" />
     <Content Include="models\ethereum\phishing\random_forest_phishing_detector_aggregated.pkl" />
     <Content Include="models\ethereum\phishing\random_forest_phishing_detector_aggregated_features.pkl" />
+    <Content Include="models\ethereum\phishing\random_forest_phishing_detector_erc20_features.pkl" />
     <Content Include="requirements.txt" />
     <Content Include="webview\static\css\styles.css" />
     <Content Include="webview\static\images\Logo.png" />

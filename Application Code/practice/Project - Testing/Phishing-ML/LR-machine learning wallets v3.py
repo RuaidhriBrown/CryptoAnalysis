@@ -11,7 +11,7 @@ import numpy as np
 import joblib
 
 # Load the aggregated Ethereum wallet transaction data from the newly created file
-file_path = 'datasets/ethereum/combined_transaction_data.csv'  # Update this to the path where you saved the combined data
+file_path = 'datasets/ethereum/transaction_dataset_even.csv'
 transaction_data = pd.read_csv(file_path)
 
 # Trim spaces from the column names

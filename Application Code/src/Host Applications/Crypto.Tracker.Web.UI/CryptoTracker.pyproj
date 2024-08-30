@@ -70,8 +70,6 @@
     <Content Include="models\ethereum\moneyLaundering\random_forest_phishing_detector_transactions_features.pkl" />
     <Content Include="models\ethereum\phishing\random_forest_phishing_detector_aggregated.pkl" />
     <Content Include="models\ethereum\phishing\random_forest_phishing_detector_aggregated_features.pkl" />
-    <Content Include="models\ethereum\phishing\random_forest_phishing_detector_erc20.pkl" />
-    <Content Include="models\ethereum\phishing\transactions_random_forest_phishing_detector.pkl" />
     <Content Include="requirements.txt" />
     <Content Include="webview\static\css\styles.css" />
     <Content Include="webview\static\images\Logo.png" />

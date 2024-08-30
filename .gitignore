@@ -361,3 +361,11 @@ MockEmisProxy/build_deploy_run.ps1
 /Application Code/src/Host Applications/Crypto.Tracker.Web.UI/models/ethereum/phishing/transactions_random_forest_phishing_detector.pkl
 /Application Code/practice/Project - Testing/random_forest_phishing_detector_transactions.pkl
 /Application Code/practice/Project - Testing/random_forest_phishing_detector_transactions_features.pkl
+/Application Code/practice/Project - Testing/datasets/ethereum/MoneyLaundering/all_normal_transactions.csv
+/Application Code/practice/Project - Testing/datasets/ethereum/MoneyLaundering/all_wallet_summaries.csv
+/Application Code/practice/Project - Testing/datasets/ethereum/MoneyLaundering/combined_transaction_data.csv
+/Application Code/practice/Project - Testing/datasets/ethereum/MoneyLaundering/Money_Laundering_Wallets_List.csv
+/Application Code/practice/Project - Testing/datasets/ethereum/MoneyLaundering/Money_Laundering_Wallets_List_with_Balances.csv
+/Application Code/src/Host Applications/Crypto.Tracker.Web.UI/models/ethereum/phishing/random_forest_phishing_detector_aggregated_features.pkl
+/Application Code/src/Host Applications/Crypto.Tracker.Web.UI/models/ethereum/phishing/random_forest_phishing_detector_erc20.pkl
+/Application Code/src/Host Applications/Crypto.Tracker.Web.UI/models/ethereum/phishing/transactions_random_forest_phishing_detector.pkl

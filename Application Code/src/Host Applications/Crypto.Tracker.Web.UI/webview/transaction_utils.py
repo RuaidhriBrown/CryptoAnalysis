@@ -49,6 +49,47 @@ def get_erc20_transactions(address, startblock):
         return response.json()
     return {'error': 'Failed to fetch ERC20 transactions'}
 
+def get_balance(address):
+    """Fetch the current balance of the Ethereum address."""
+    # Ensure the address is a string
+    if not isinstance(address, str):
+        return {'error': 'Invalid address type, expected a string'}
+
+    # Validate Ethereum address format
+    if not re.match(r'^0x[a-fA-F0-9]{40}$', address):
+        return {'error': 'Invalid address format'}
+
+    # Define the API endpoint
+    url = "https://api.etherscan.io/api"
+
+    # Get the API key from settings
+    api_key = settings.ETHERSCAN_API_KEY
+
+    # Define the parameters for the API request
+    params = {
+        "module": "account",
+        "action": "balance",
+        "address": address,
+        "tag": "latest",  # Get the most recent balance
+        "apikey": api_key
+    }
+
+    # Make the API request
+    response = requests.get(url, params=params)
+
+    # Check if the response is successful
+    if response.status_code == 200:
+        result = response.json()
+        if result['status'] == '1':
+            # Convert balance from Wei to Ether
+            balance_in_wei = int(result['result'])
+            balance_in_ether = balance_in_wei / 10**18
+            return {'balance': balance_in_ether}
+        else:
+            return {'error': 'Failed to fetch balance', 'message': result.get('message', 'No message')}
+    return {'error': 'Failed to fetch balance', 'status_code': response.status_code}
+
+
 def update_transactions(address, eth_transactions, erc20_transactions):
     eth_transactions_to_create = []
     erc20_transactions_to_create = []

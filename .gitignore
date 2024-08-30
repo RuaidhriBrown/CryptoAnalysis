@@ -297,3 +297,75 @@ MockEmisProxy/header_logo.png
 MockEmisProxy/stylesheet.css
 MockEmisProxy/build_deploy_run.ps1
 .bak
+/Application Code/practice/Project - Testing/datasets/bitcoin/elliptic_txs_classes.csv
+/Application Code/practice/Project - Testing/datasets/bitcoin/elliptic_txs_edgelist.csv
+/Application Code/practice/Project - Testing/datasets/bitcoin/elliptic_txs_features.csv
+/Application Code/practice/Project - Testing/datasets/ethereum/er20_collection/Flag_0_erc20_transactions_0_1.csv
+/Application Code/practice/Project - Testing/datasets/ethereum/transactions/Flag_0_erc20_transactions_0_9.csv
+/Application Code/practice/Project - Testing/datasets/ethereum/analysis/analysis_summary_combined_er20.xlsx
+/Application Code/practice/Project - Testing/datasets/ethereum/analysis/analysis_summary_combined_transactions.xlsx
+/Application Code/practice/Project - Testing/datasets/ethereum/analysis/analysis_summary_transaction_dataset_even.xlsx
+/Application Code/practice/Project - Testing/datasets/ethereum/er20_collection
+/Application Code/practice/Project - Testing/datasets/ethereum/transactions
+/Application Code/src/Host Applications/Crypto.Tracker.Web.UI/media/plots/0x00009277775ac7d0d59eaad8fee3d10ac6c805e8_daily.png
+/Application Code/src/Host Applications/Crypto.Tracker.Web.UI/media/plots/0x00009277775ac7d0d59eaad8fee3d10ac6c805e8_day_of_week.png
+/Application Code/src/Host Applications/Crypto.Tracker.Web.UI/media/plots/0x00009277775ac7d0d59eaad8fee3d10ac6c805e8_hourly.png
+/Application Code/src/Host Applications/Crypto.Tracker.Web.UI/media/plots/0x00009277775ac7d0d59eaad8fee3d10ac6c805e8_monthly.png
+/Application Code/src/Host Applications/Crypto.Tracker.Web.UI/media/plots/0x00009277775ac7d0d59eaad8fee3d10ac6c805e8_weekly.png
+/Application Code/src/Host Applications/Crypto.Tracker.Web.UI/media/plots/0x0002bda54cb772d040f779e88eb453cac0daa244_daily.png
+/Application Code/src/Host Applications/Crypto.Tracker.Web.UI/media/plots/0x0002bda54cb772d040f779e88eb453cac0daa244_day_of_week.png
+/Application Code/src/Host Applications/Crypto.Tracker.Web.UI/media/plots/0x0002bda54cb772d040f779e88eb453cac0daa244_hourly.png
+/Application Code/src/Host Applications/Crypto.Tracker.Web.UI/media/plots/0x0002bda54cb772d040f779e88eb453cac0daa244_monthly.png
+/Application Code/src/Host Applications/Crypto.Tracker.Web.UI/media/plots/0x0002bda54cb772d040f779e88eb453cac0daa244_weekly.png
+/Application Code/src/Host Applications/Crypto.Tracker.Web.UI/media/plots/0x00038e6ba2fd5c09aedb96697c8d7b8fa6632e5e_daily.png
+/Application Code/src/Host Applications/Crypto.Tracker.Web.UI/media/plots/0x00038e6ba2fd5c09aedb96697c8d7b8fa6632e5e_hourly.png
+/Application Code/src/Host Applications/Crypto.Tracker.Web.UI/media/plots/0x00038e6ba2fd5c09aedb96697c8d7b8fa6632e5e_weekly.png
+/Application Code/src/Host Applications/Crypto.Tracker.Web.UI/media/plots/0x00062d1dd1afb6fb02540ddad9cdebfe568e0d89_day_of_week.png
+/Application Code/src/Host Applications/Crypto.Tracker.Web.UI/media/plots/0x00062d1dd1afb6fb02540ddad9cdebfe568e0d89_hourly.png
+/Application Code/src/Host Applications/Crypto.Tracker.Web.UI/media/plots/0x00062d1dd1afb6fb02540ddad9cdebfe568e0d89_monthly.png
+/Application Code/src/Host Applications/Crypto.Tracker.Web.UI/media/plots/0x0020731604c882cf7bf8c444be97d17b19ea4316_daily.png
+/Application Code/src/Host Applications/Crypto.Tracker.Web.UI/media/plots/0x0020731604c882cf7bf8c444be97d17b19ea4316_hourly.png
+/Application Code/src/Host Applications/Crypto.Tracker.Web.UI/media/plots/0x0020731604c882cf7bf8c444be97d17b19ea4316_weekly.png
+/Application Code/src/Host Applications/Crypto.Tracker.Web.UI/media/plots/0x00650a784ee109797ba8c05f3496bdbf2b2b7a1c_daily.png
+/Application Code/src/Host Applications/Crypto.Tracker.Web.UI/media/plots/0x00650a784ee109797ba8c05f3496bdbf2b2b7a1c_hourly.png
+/Application Code/src/Host Applications/Crypto.Tracker.Web.UI/media/plots/0x00650a784ee109797ba8c05f3496bdbf2b2b7a1c_weekly.png
+/Application Code/src/Host Applications/Crypto.Tracker.Web.UI/media/plots/0xf3ae45d5a0b8efb41444101267b56e6795051fac_daily.png
+/Application Code/src/Host Applications/Crypto.Tracker.Web.UI/media/plots/0xf3ae45d5a0b8efb41444101267b56e6795051fac_hourly.png
+/Application Code/src/Host Applications/Crypto.Tracker.Web.UI/media/plots/0xf3ae45d5a0b8efb41444101267b56e6795051fac_weekly.png
+/Application Code/practice/Project - Testing/datasets/ethereum/MoneyLaundering/analysis/analysis_summary_combined_aggregate.xlsx
+/Application Code/practice/Project - Testing/datasets/ethereum/MoneyLaundering/analysis
+/Application Code/practice/Project - Testing/correlation_heatmap.png
+/Application Code/practice/Project - Testing/datasets/ethereum/combined_er20.csv
+/Application Code/practice/Project - Testing/datasets/ethereum/combined_transactions.csv
+/Application Code/practice/Project - Testing/datasets/ethereum/transaction_dataset_even.csv
+/Application Code/practice/Project - Testing/datasets/ethereum/transaction_dataset-original.csv
+/Application Code/practice/Project - Testing/results/random_forest_moneyLaundering_detector_er20.pkl
+/Application Code/practice/Project - Testing/results/random_forest_moneyLaundering_detector_er20_features.pkl
+/Application Code/practice/Project - Testing/results/random_forest_moneyLaundering_detector_transactions.pkl
+/Application Code/practice/Project - Testing/results/random_forest_moneyLaundering_detector_transactions_features.pkl
+/Application Code/practice/Project - Testing/results/random_forest_phishing_detector_aggregated.pkl
+/Application Code/practice/Project - Testing/results/random_forest_phishing_detector_aggregated_features.pkl
+/Application Code/practice/Project - Testing/results/random_forest_phishing_detector_erc20.pkl
+/Application Code/practice/Project - Testing/results/random_forest_phishing_detector_erc20_features.pkl
+/Application Code/practice/Project - Testing/results/random_forest_phishing_detector_transactions.pkl
+/Application Code/practice/Project - Testing/results/random_forest_phishing_detector_transactions_features.pkl
+/Application Code/practice/Project - Testing/results/transactions_random_forest_phishing_detector.pkl
+/Application Code/src/Host Applications/Crypto.Tracker.Web.UI/models/ethereum/moneyLaundering/random_forest_phishing_detector_aggregated.pkl
+/Application Code/src/Host Applications/Crypto.Tracker.Web.UI/models/ethereum/phishing/random_forest_phishing_detector_aggregated.pkl
+/Application Code/src/Host Applications/Crypto.Tracker.Web.UI/models/ethereum/moneyLaundering/random_forest_phishing_detector_aggregated_features.pkl
+/Application Code/src/Host Applications/Crypto.Tracker.Web.UI/models/ethereum/moneyLaundering/random_forest_phishing_detector_aggregated_features.pkl
+/Application Code/src/Host Applications/Crypto.Tracker.Web.UI/models/ethereum/moneyLaundering/random_forest_phishing_detector_erc20.pkl
+/Application Code/src/Host Applications/Crypto.Tracker.Web.UI/models/ethereum/moneyLaundering/random_forest_phishing_detector_erc20_features.pkl
+/Application Code/src/Host Applications/Crypto.Tracker.Web.UI/models/ethereum/moneyLaundering/random_forest_phishing_detector_transactions.pkl
+/Application Code/src/Host Applications/Crypto.Tracker.Web.UI/models/ethereum/moneyLaundering/random_forest_phishing_detector_transactions_features.pkl
+/Application Code/src/Host Applications/Crypto.Tracker.Web.UI/models/ethereum/phishing/transactions_random_forest_phishing_detector.pkl
+/Application Code/practice/Project - Testing/random_forest_phishing_detector_transactions.pkl
+/Application Code/practice/Project - Testing/random_forest_phishing_detector_transactions_features.pkl
+/Application Code/practice/Project - Testing/datasets/ethereum/MoneyLaundering/all_normal_transactions.csv
+/Application Code/practice/Project - Testing/datasets/ethereum/MoneyLaundering/all_wallet_summaries.csv
+/Application Code/practice/Project - Testing/datasets/ethereum/MoneyLaundering/combined_transaction_data.csv
+/Application Code/practice/Project - Testing/datasets/ethereum/MoneyLaundering/Money_Laundering_Wallets_List.csv
+/Application Code/practice/Project - Testing/datasets/ethereum/MoneyLaundering/Money_Laundering_Wallets_List_with_Balances.csv
+/Application Code/src/Host Applications/Crypto.Tracker.Web.UI/models/ethereum/phishing/random_forest_phishing_detector_aggregated_features.pkl
+/Application Code/src/Host Applications/Crypto.Tracker.Web.UI/models/ethereum/phishing/random_forest_phishing_detector_erc20.pkl
+/Application Code/src/Host Applications/Crypto.Tracker.Web.UI/models/ethereum/phishing/transactions_random_forest_phishing_detector.pkl

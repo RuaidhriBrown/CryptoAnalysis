@@ -68,6 +68,7 @@
     <Content Include="models\ethereum\moneyLaundering\random_forest_moneyLaundering_detector_er20_features.pkl" />
     <Content Include="models\ethereum\moneyLaundering\random_forest_moneyLaundering_detector_transactions.pkl" />
     <Content Include="models\ethereum\moneyLaundering\random_forest_moneyLaundering_detector_transactions_features.pkl" />
+    <Content Include="models\ethereum\phishing\random_forest_phishing_detector_erc20.pkl" />
     <Content Include="models\ethereum\phishing\random_forest_phishing_detector_transactions.pkl" />
     <Content Include="models\ethereum\phishing\random_forest_phishing_detector_transactions_features.pkl" />
     <Content Include="models\ethereum\phishing\random_forest_phishing_detector_aggregated.pkl" />

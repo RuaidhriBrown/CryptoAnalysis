@@ -29,8 +29,8 @@ Note: We highly recommend using Docker Compose for setting up the project, as it
 
 You will still need to ensure the trained models are added to the models directory
 
-[Phishing Detection](#phishing-detection)
-[Money Laundering Detection](#money-laundering-detection)
+- [Phishing Detection](#phishing-detection)
+- [Money Laundering Detection](#money-laundering-detection)
 
 ### Why Use Docker Compose?
 - Simplifies Configuration: Docker Compose manages all dependencies and configurations in a single file, eliminating the need for manual setup in settings.py.
@@ -54,6 +54,9 @@ Note: the static files may not work in the docker-compose method
     This command will build the Docker images and start the containers for the web application and the database. All configurations, including environment variables and database settings, are automatically managed by Docker Compose.
 3. **Access the Web Application**:
     - Once the Docker containers are up and running, you can access the web application in your browser at http://localhost:8000.
+4. **Login to the user**:
+    - Username: admin
+    - password: X1B2#WXYZ123a
 
 ### Avoid Manual Configuration
 If you choose to use Docker Compose, you don't need to manually configure the settings.py file for environment-specific settings like SECRET_KEY, DEBUG, ALLOWED_HOSTS, or DATABASES. Docker Compose handles these settings through environment variables defined in the docker-compose.yml file.

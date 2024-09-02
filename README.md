@@ -41,10 +41,16 @@ Note: the static files may not work in the docker-compose method
 
 ### Steps to Start Local Development Using Docker Compose:
 1. **Clone the repository**:
+    ```powershell
     git clone https://github.com/RuaidhriBrown/CryptoAnalysis.git
     cd 'CryptoAnalysis\Application Code\src\Host Applications\Crypto.Tracker.Web.UI\'
+    ```
 2. **Run Docker Compose to build and start the services**:
-    Run the following: docker-compose up --build
+    Run the following: 
+    ```powershell
+    docker-compose up --build
+    ```
+    
     This command will build the Docker images and start the containers for the web application and the database. All configurations, including environment variables and database settings, are automatically managed by Docker Compose.
 3. **Access the Web Application**:
     - Once the Docker containers are up and running, you can access the web application in your browser at http://localhost:8000.
@@ -61,18 +67,18 @@ Before running the project, you need to install all the required Python packages
 #### Installing Requirements for Machine Learning Model Training
 
 1. **Navigate to the project directory**:
-   ```bash
+   ```powershell
    cd "CryptoAnalysis\Application Code\practice\Project - Testing\"
    ```
 2. **Install the Python dependencies**:
     - Make sure you have Python and pip installed. If you're using a virtual environment (recommended), activate it first.
     - Run the following command to install the required packages for the machine learning models:
-   ```bash
+   ```powershell
    pip install -r requirements.txt
    ```
 3. **Installing Requirements for the Web Application**:
     - Navigate to the web application directory: 'cd CryptoAnalysis/Application\ Code/src/Host\ Applications/Crypto.Tracker.Web.UI'
-    ```bash
+    ```powershell
     pip install -r requirements.txt
     ```
     - Ensure that the requirements.txt file, which contains all necessary dependencies for running the Django web application, is located in the web application directory.
@@ -310,7 +316,7 @@ To properly set up the Django web application for the Crypto Analysis Tool, user
      ```
    - **What to do**: 
      Replace the default `SECRET_KEY` with a unique, randomly generated string. This key is crucial for security purposes and should be kept secret. You can generate a new key using online tools or by running Django’s `get_random_secret_key()` function:
-     ```bash
+     ```powershell
      python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'
      ```
 

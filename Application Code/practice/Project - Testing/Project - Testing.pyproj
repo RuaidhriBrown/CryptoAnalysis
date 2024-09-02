@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>2664c312-12cb-479e-be0d-a5cfc1296ba7</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>write-word-doc.py</StartupFile>
+    <StartupFile>Phishing-ML\LR-machine learning wallets v3.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>

@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 from sklearn.model_selection import train_test_split, ParameterGrid, cross_val_score
 from sklearn.ensemble import RandomForestClassifier
@@ -11,7 +12,7 @@ import numpy as np
 import joblib
 
 # Load the dataset
-file_path = 'datasets/ethereum/combined_transactions.csv'
+file_path = 'datasets/ethereum/phishing/combined_transactions.csv'
 transaction_data = pd.read_csv(file_path)
 
 # Feature selection based on the dataset provided
@@ -27,6 +28,10 @@ if missing_features:
 # Select the features and handle missing values
 transaction_data_selected = transaction_data[initial_features].apply(pd.to_numeric, errors='coerce').fillna(0)
 true_labels = transaction_data['FLAG']
+
+if true_labels.isna().sum() > 0:
+    print(f"Found {true_labels.isna().sum()} missing values in the target variable. Filling with mode or removing.")
+    true_labels = true_labels.fillna(true_labels.mode()[0])
 
 # Feature Engineering: Adding interaction terms
 transaction_data_selected['Gas_Used_Ratio'] = (
@@ -55,7 +60,7 @@ feature_importances = pd.Series(rf_selector.feature_importances_, index=transact
 top_features = feature_importances.nlargest(10).index.tolist()
 
 # Save the top features used during training
-joblib.dump(top_features, '/results/random_forest_phishing_detector_transactions_features.pkl')
+joblib.dump(top_features, os.path.join('results', 'random_forest_phishing_detector_transactions_features.pkl'))
 
 # Apply SMOTE only on the training data
 print("Applying SMOTE to balance the training data...")
@@ -94,9 +99,7 @@ rf_model = RandomForestClassifier(**best_params, random_state=42, n_jobs=-1, cla
 rf_model.fit(X_train_resampled, y_train_resampled)
 
 # Save the trained model
-model_filename = '/results/random_forest_phishing_detector_transactions.pkl'
-joblib.dump(rf_model, model_filename)
-print(f"Model saved to {model_filename}")
+joblib.dump(rf_model, os.path.join('results', 'random_forest_phishing_detector_transactions.pkl'))
 
 # Predict on the balanced test data
 print("Predicting on the test dataset...")

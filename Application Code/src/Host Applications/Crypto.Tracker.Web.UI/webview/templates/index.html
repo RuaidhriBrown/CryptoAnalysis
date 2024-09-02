@@ -1,11 +1,58 @@
 {% extends "layout.html" %}
 {% block title %}
-My home page
+My Home Page
 {% endblock %}
 {% block content %}
-<h1>Hello</h1>
+<h1>Welcome</h1>
 <p>
-    Home page of my first Django web app.<br>
-    Hooray !!!
+    This web application is developed as part of a master's degree project. Its purpose is to analyze Ethereum wallets and transactions to detect phishing, money laundering, and other illicit activities using advanced machine learning models.
 </p>
+<p>
+    Before getting started, please ensure you have completed the following setup steps:
+</p>
+<ul>
+    <li>Added the <strong>Trained Models</strong> to the project's model directory.</li>
+    <li>Added your <strong>Etherscan API key</strong> to the project's settings.</li>
+    <li>Set up the <strong>database</strong> correctly with all necessary migrations applied.</li>
+    <li>Created a <strong>superuser</strong> account to manage the Django admin panel.</li>
+</ul>
+<p>
+    You can find more details about the setup process in the <a href="https://github.com/RuaidhriBrown/CryptoAnalysis" target="_blank">GitHub repository</a>. The repository includes a <code>README.md</code> file that provides comprehensive instructions on how to configure and run this web application.
+</p>
+
+<!-- Form to input wallet address -->
+<form id="walletForm">
+    <div>
+        <label for="walletAddress">Enter Wallet Address:</label>
+        <input type="text" id="walletAddress" name="address" placeholder="Enter Ethereum wallet address" required>
+    </div>
+    <div>
+        <button type="submit">View Wallet Details</button>
+    </div>
+</form>
+
+<!-- JavaScript to handle form submission -->
+<script>document.getElementById('walletForm').addEventListener('submit', function(event) {
+        event.preventDefault();  // Prevent the default form submission
+        var walletAddress = document.getElementById('walletAddress').value.trim();
+        if (walletAddress) {
+            window.location.href = "{% url 'wallet_details' 'WALLET_PLACEHOLDER' %}".replace('WALLET_PLACEHOLDER', walletAddress);
+        } else {
+            alert('Please enter a valid wallet address.');
+        }
+    });</script>
+
+<!-- Recommended Wallets Section -->
+<h2>Recommended Wallets to Get Started:</h2>
+<ul>
+    <li><a href="{% url 'wallet_details' '0x00009277775ac7d0d59eaad8fee3d10ac6c805e8' %}">0x00009277775ac7d0d59eaad8fee3d10ac6c805e8</a></li>
+    <li><a href="{% url 'wallet_details' '0x0002b44ddb1476db43c868bd494422ee4c136fed' %}">0x0002b44ddb1476db43c868bd494422ee4c136fed</a></li>
+    <li><a href="{% url 'wallet_details' '0x0002bda54cb772d040f779e88eb453cac0daa244' %}">0x0002bda54cb772d040f779e88eb453cac0daa244</a></li>
+    <li><a href="{% url 'wallet_details' '0x00038e6ba2fd5c09aedb96697c8d7b8fa6632e5e' %}">0x00038e6ba2fd5c09aedb96697c8d7b8fa6632e5e</a></li>
+    <li><a href="{% url 'wallet_details' '0x00062d1dd1afb6fb02540ddad9cdebfe568e0d89' %}">0x00062d1dd1afb6fb02540ddad9cdebfe568e0d89</a></li>
+    <li><a href="{% url 'wallet_details' '0x000895ad78f4403ecd9468900e68d6ee506136fd' %}">0x000895ad78f4403ecd9468900e68d6ee506136fd</a></li>
+    <li><a href="{% url 'wallet_details' '0x000c515c0b0bd2c457bb004b5a2cd338135a2b41' %}">0x000c515c0b0bd2c457bb004b5a2cd338135a2b41</a></li>
+    <li><a href="{% url 'wallet_details' '0x000d63fc5df52b0204374c2f5a3249779805d5d1' %}">0x000d63fc5df52b0204374c2f5a3249779805d5d1</a></li>
+</ul>
+
 {% endblock %}

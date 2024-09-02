@@ -3,7 +3,6 @@ from django.db import models
 from django.utils.timezone import make_aware, get_current_timezone
 from datetime import datetime
 
-
 # Define the default date
 default_date_naive = datetime(2021, 5, 26, 11, 31, 0)
 DEFAULT_LAST_UPDATED = make_aware(default_date_naive, timezone=get_current_timezone())
@@ -185,17 +184,24 @@ class WalletAnalysis(models.Model):
     def get_or_create_system_user(self):
         """Retrieve the 'System' user, creating it if it doesn't exist."""
         system_role = Role.get_system_role()
+    
+        # Get or create the 'System' user
         system_user, created = User.objects.get_or_create(
             username='System',
             defaults={'is_active': False}
         )
-        if created:
-            # Create a user profile associated with the 'System' role
-            UserProfile.objects.create(user=system_user, role=system_role)
-        else:
-            # Ensure the system user has a profile, create it if it does not exist
-            UserProfile.objects.get_or_create(user=system_user, defaults={'role': system_role})
-        
+
+        # Use get_or_create to ensure a UserProfile is created if it doesn't exist
+        user_profile, profile_created = UserProfile.objects.get_or_create(
+            user=system_user,
+            defaults={'role': system_role}
+        )
+
+        if not profile_created and user_profile.role != system_role:
+            # Update role if it does not match expected system role
+            user_profile.role = system_role
+            user_profile.save()
+
         return system_user
 
 class WalletNote(models.Model):

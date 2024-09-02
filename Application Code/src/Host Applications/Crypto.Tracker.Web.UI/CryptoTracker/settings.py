@@ -1,7 +1,7 @@
 """
 Django settings for CryptoTracker project.
 
-Based on by 'django-admin startproject' using Django 2.1.2.
+Based on 'django-admin startproject' using Django 2.1.2.
 
 For more information on this file, see
 https://docs.djangoproject.com/en/2.1/topics/settings/
@@ -20,17 +20,16 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'b1be7575-abe1-4fe1-9c95-dce1e276f171'
+SECRET_KEY = os.getenv('SECRET_KEY', 'b1be7575-abe1-4fe1-9c95-dce1e276f171')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost').split(' ')
 
 # Application references
 # https://docs.djangoproject.com/en/2.1/ref/settings/#std:setting-INSTALLED_APPS
 INSTALLED_APPS = [
-    # Add your apps here to enable them
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -78,8 +77,15 @@ WSGI_APPLICATION = 'CryptoTracker.wsgi.application'
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('DATABASE_NAME', 'CryptoTracker'),
+        'USER': os.getenv('DATABASE_USER', 'crypto-postgres'),
+        'PASSWORD': os.getenv('DATABASE_PASSWORD', 'X1B2#WXYZ123a'),
+        'HOST': os.getenv('DATABASE_HOST', 'localhost'),
+        'PORT': os.getenv('DATABASE_PORT', '5432'),
+        'OPTIONS': {
+            'options': '-c search_path=dev_crypto_tracker,public'
+        }
     }
 }
 
@@ -109,37 +115,32 @@ USE_L10N = True
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.1/howto/static-files/
-STATIC_URL = '/static/'
-STATIC_ROOT = posixpath.join(*(BASE_DIR.split(os.path.sep) + ['static']))
+STATIC_URL = '/static/'  # URL to use when referring to static files
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  # Directories to search for additional static files
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Directory to collect static files for production
 
-# Add this line to your settings.py file
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-LOGIN_REDIRECT_URL = 'home'
-
+# Media files (Uploaded by users)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+LOGIN_REDIRECT_URL = 'home'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'CryptoTracker',
-        'USER': 'crypto-postgres',
-        'PASSWORD': 'X1B2#WXYZ123a',
-        'HOST': 'localhost',
-        'PORT': '5432',
-        'OPTIONS': {
-            'options': '-c search_path=dev_crypto_tracker,public'
-        }
-    }
+# Etherscan API key configuration
+ETHERSCAN_API_KEY = os.getenv("ETHERSCAN_API_KEY", "your-default-api-key")
+
+# Logging configuration (useful for debugging)
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'DEBUG' if DEBUG else 'INFO',
+    },
 }
 
-#   Set the environment variable in your shell or environment manager
-#   (e.g., bash, zsh, or a .env file):
-#   Powershell example 
-#   $env:ETHERSCAN_API_KEY = ""<API_Key_Here>"
-#   OR
-#   [System.Environment]::SetEnvironmentVariable("ETHERSCAN_API_KEY", "<API_Key_Here>", "User")
-
-ETHERSCAN_API_KEY = os.getenv("ETHERSCAN_API_KEY", "your-default-api-key")

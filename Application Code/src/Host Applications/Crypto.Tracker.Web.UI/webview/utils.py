@@ -2,6 +2,9 @@
 # utils.py
 from django.db.models import Count, Q
 
+import hashlib
+from .models import Wallet
+
 import matplotlib
 matplotlib.use('Agg')  # Use the Agg backend for rendering plots
 
@@ -10,6 +13,8 @@ import matplotlib.pyplot as plt
 import os
 from django.conf import settings
 from datetime import datetime
+
+from .models import CompletedAnalysis, EthereumTransaction, ERC20Transaction, Wallet, WalletAnalysis, UserProfile, WalletNote
 
 def combine_data(address, transactions, erc20_transactions):
     transaction_df = transactions.filter(Q(from_address=address) | Q(to_address=address))
@@ -228,3 +233,53 @@ def convert_to_int(value, default=None):
         return int_value
     except (ValueError, TypeError, OverflowError):
         return default  # Return default if conversion fails
+    
+
+def generate_wallet_analysis_hash(wallet_analysis):
+    """
+    Generate a SHA-256 hash of the entire wallet analysis including all transactions,
+    wallet details, notes, and completed analysis results.
+    """
+    wallet = wallet_analysis.wallet
+    
+    # Start with wallet details
+    hash_input = f"{wallet.id}{wallet.address}{wallet.balance}{wallet.total_sent_transactions}{wallet.total_received_transactions}" \
+                 f"{wallet.unique_sent_addresses}{wallet.unique_received_addresses}{wallet.total_ether_sent}{wallet.total_ether_received}" \
+                 f"{wallet.total_erc20_sent}{wallet.total_erc20_received}{wallet.last_updated}"
+
+    # Include all Ethereum transactions
+    eth_transactions = EthereumTransaction.objects.filter(Q(from_address=wallet.address) | Q(to_address=wallet.address))
+    for transaction in eth_transactions:
+        hash_input += f"{transaction.block_number}{transaction.timestamp}{transaction.hash}{transaction.nonce}{transaction.block_hash}" \
+                      f"{transaction.transaction_index}{transaction.from_address}{transaction.to_address}{transaction.value}" \
+                      f"{transaction.gas}{transaction.gas_price}{transaction.is_error}{transaction.txreceipt_status}{transaction.input}" \
+                      f"{transaction.contract_address}{transaction.cumulative_gas_used}{transaction.gas_used}{transaction.confirmations}" \
+                      f"{transaction.method_id}{transaction.function_name}{transaction.address}{transaction.last_updated}"
+
+    # Include all ERC20 transactions
+    erc20_transactions = ERC20Transaction.objects.filter(Q(from_address=wallet.address) | Q(to_address=wallet.address))
+    for transaction in erc20_transactions:
+        hash_input += f"{transaction.composite_id}{transaction.block_number}{transaction.timestamp}{transaction.hash}{transaction.nonce}" \
+                      f"{transaction.block_hash}{transaction.from_address}{transaction.contract_address}{transaction.to_address}" \
+                      f"{transaction.value}{transaction.token_name}{transaction.token_decimal}{transaction.transaction_index}" \
+                      f"{transaction.gas}{transaction.gas_price}{transaction.gas_used}{transaction.cumulative_gas_used}{transaction.input}" \
+                      f"{transaction.confirmations}{transaction.address}{transaction.last_updated}"
+
+    # Include all Wallet Notes
+    wallet_notes = WalletNote.objects.filter(analysis__wallet=wallet)
+    for note in wallet_notes:
+        hash_input += f"{note.analysis.id}{note.user.username if note.user else ''}{note.content}{note.created_at}{note.updated_at}{note.note_type}"
+
+    # Include all Completed Analyses
+    completed_analyses = CompletedAnalysis.objects.filter(wallet_analysis__wallet=wallet)
+    for analysis in completed_analyses:
+        hash_input += f"{analysis.wallet_analysis.id}{analysis.name}{analysis.note}{analysis.completed_at}{analysis.concluded_happened}"
+
+    # Generate SHA-256 hash
+    hash_value = hashlib.sha256(hash_input.encode('utf-8')).hexdigest()
+
+    # Update the analysis_hash field of the WalletAnalysis instance
+    wallet_analysis.analysis_hash = hash_value
+    wallet_analysis.save(update_fields=['analysis_hash'])
+
+    return hash_value

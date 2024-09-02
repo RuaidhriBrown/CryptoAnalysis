@@ -1,9 +1,12 @@
-from .model_loader import load_wallet_model, load_transaction_model, load_erc20_model
+from django.db.models import Q
+from .moneyLaundering_model_loader import load_moneyLaundering_wallet_model, load_moneyLaundering_transaction_model, load_moneyLaundering_erc20_model
+from .phishings_models_loader import load_phishing_wallet_model, load_phishing_transaction_model, load_phishing_erc20_model
 from .models import CompletedAnalysis, WalletAnalysis, EthereumTransaction, ERC20Transaction, Wallet
 import pandas as pd
 import numpy as np
 from .transaction_utils import get_balance
 from django.core.exceptions import ObjectDoesNotExist
+
 
 def combine_data(wallet_address, transactions, erc20_transactions):
     # Convert the QuerySet to DataFrame for easier manipulation
@@ -150,8 +153,8 @@ def combine_data(wallet_address, transactions, erc20_transactions):
     return combined_info
 
 
-def run_wallet_phishing_analysis(wallet_analysis):
-    wallet_model, wallet_features = load_wallet_model()
+def run_wallet_phishing_model_analysis(wallet_analysis):
+    wallet_model, wallet_features = load_moneyLaundering_wallet_model()
 
     wallet = wallet_analysis.wallet
 
@@ -187,13 +190,13 @@ def run_wallet_phishing_analysis(wallet_analysis):
     return wallet_prediction == 1
 
 
-def run_transaction_phishing_analysis(wallet_analysis):
-    transaction_model, transaction_features = load_transaction_model()
+def run_transaction_phishing_model_analysis(wallet_analysis):
+    transaction_model, transaction_features = load_phishing_transaction_model()
 
     wallet = wallet_analysis.wallet
 
     # Retrieve Ethereum transactions for the wallet
-    transactions = EthereumTransaction.objects.filter(from_address=wallet.address) | EthereumTransaction.objects.filter(to_address=wallet.address)
+    transactions = EthereumTransaction.objects.filter(Q(from_address=wallet.address) | Q(to_address=wallet.address))
 
     # Extract necessary features from the transactions
     transactions_df = pd.DataFrame(list(transactions.values('value', 'gas', 'gas_price', 'nonce', 'cumulative_gas_used', 'gas_used')))
@@ -208,34 +211,33 @@ def run_transaction_phishing_analysis(wallet_analysis):
     # Perform predictions for each transaction
     transaction_predictions = transaction_model.predict(transactions_df)
 
-    # Count the number of phishing predictions
-    phishing_detected_count = sum(transaction_predictions == 1)
+    # Get indices of transactions detected as phishing
+    phishing_detected_indices = transactions_df.index[transaction_predictions == 1].tolist()
 
-    # Check if a CompletedAnalysis with the same wallet_analysis and name exists
-    completed_analysis, created = CompletedAnalysis.objects.update_or_create(
+    # Calculate the total number of transactions analyzed
+    total_transactions_analyzed = len(transactions_df)
+
+    # Optionally save the analysis result as before
+    CompletedAnalysis.objects.update_or_create(
         wallet_analysis=wallet_analysis,
         name='Transaction Phishing Detection',
         defaults={
-            'note': f'Phishing detected in {phishing_detected_count} out of {len(transactions_df)} transactions',
-            'concluded_happened': (phishing_detected_count > 0)
+            'note': f'Phishing detected in {len(phishing_detected_indices)} out of {total_transactions_analyzed} transactions',
+            'concluded_happened': (len(phishing_detected_indices) > 0)
         }
     )
 
-    # If this was an update, you may want to create a new note or update the existing one
-    if not created:
-        # Optionally, update the note if the analysis was updated
-        completed_analysis.save()
-
-    return phishing_detected_count > 0
+    return phishing_detected_indices
 
 
-def run_erc20_phishing_analysis(wallet_analysis):
-    erc20_model, erc20_features = load_erc20_model()
+
+def run_erc20_phishing_model_analysis(wallet_analysis):
+    erc20_model, erc20_features = load_phishing_erc20_model()
 
     wallet = wallet_analysis.wallet
 
     # Retrieve ERC20 transactions for the wallet
-    erc20_transactions = ERC20Transaction.objects.filter(from_address=wallet.address) | ERC20Transaction.objects.filter(to_address=wallet.address)
+    erc20_transactions = ERC20Transaction.objects.filter(Q(from_address=wallet.address) | Q(to_address=wallet.address))
 
     # Extract necessary features from the transactions
     erc20_df = pd.DataFrame(list(erc20_transactions.values(
@@ -260,25 +262,24 @@ def run_erc20_phishing_analysis(wallet_analysis):
     # Perform predictions for each ERC20 transaction
     erc20_predictions = erc20_model.predict(erc20_df)
 
-    # Count the number of phishing predictions
-    phishing_detected_count = sum(erc20_predictions == 1)
+    # Get indices of ERC20 transactions detected as phishing
+    phishing_detected_indices = erc20_df.index[erc20_predictions == 1].tolist()
 
-    # Check if a CompletedAnalysis with the same wallet_analysis and name exists
-    completed_analysis, created = CompletedAnalysis.objects.update_or_create(
+    # Calculate the total number of ERC20 transactions analyzed
+    total_transactions_analyzed = len(erc20_df)
+
+    # Optionally save the analysis result as before
+    CompletedAnalysis.objects.update_or_create(
         wallet_analysis=wallet_analysis,
         name='ERC20 Phishing Detection',
         defaults={
-            'note': f'Phishing detected in {phishing_detected_count} out of {len(erc20_df)} ERC20 transactions',
-            'concluded_happened': (phishing_detected_count > 0)
+            'note': f'Phishing detected in {len(phishing_detected_indices)} out of {total_transactions_analyzed} ERC20 transactions',
+            'concluded_happened': (len(phishing_detected_indices) > 0)
         }
     )
 
-    # If this was an update, you may want to create a new note or update the existing one
-    if not created:
-        # Optionally, update the note if the analysis was updated
-        completed_analysis.save()
+    return phishing_detected_indices
 
-    return phishing_detected_count > 0
 
 def get_wallet_and_transactions(address):
     """Retrieve wallet and associated transactions."""
@@ -420,3 +421,130 @@ def analyze_wallet_for_Money_Laundering(wallet_analysis):
         print("The account is likely involved in money laundering.")
     else:
         print("The account does not appear to be involved in money laundering.")
+
+
+def run_wallet_moneyLaundering_model_analysis(wallet_analysis):
+    wallet_model, wallet_features = load_moneyLaundering_wallet_model()
+
+    wallet = wallet_analysis.wallet
+
+    # Retrieve Ethereum transactions for the wallet
+    transactions = EthereumTransaction.objects.filter(from_address=wallet.address) | EthereumTransaction.objects.filter(to_address=wallet.address)
+    erc20_transactions = ERC20Transaction.objects.filter(from_address=wallet.address) | ERC20Transaction.objects.filter(to_address=wallet.address)
+
+    # Combine data to create the features for prediction
+    features = combine_data(wallet.address, transactions, erc20_transactions)
+
+    # Convert features to DataFrame and align with the trained model's features
+    features_df = pd.DataFrame([features])
+    features_df = features_df.reindex(columns=wallet_features, fill_value=0)
+
+    # Perform prediction
+    wallet_prediction = wallet_model.predict(features_df)[0]
+
+    # Check if a CompletedAnalysis with the same wallet_analysis and name exists
+    completed_analysis, created = CompletedAnalysis.objects.update_or_create(
+        wallet_analysis=wallet_analysis,
+        name='Wallet Money Laundering Detection',
+        defaults={
+            'note': f'Money Laundering detected: {wallet_prediction == 1}',
+            'concluded_happened': (wallet_prediction == 1)
+        }
+    )
+
+    # If this was an update, you may want to create a new note or update the existing one
+    if not created:
+        # Optionally, update the note if the analysis was updated
+        completed_analysis.save()
+
+    return wallet_prediction == 1
+
+
+def run_transaction_moneyLaundering_model_analysis(wallet_analysis):
+    transaction_model, transaction_features = load_moneyLaundering_transaction_model()
+
+    wallet = wallet_analysis.wallet
+
+    # Retrieve Ethereum transactions for the wallet
+    transactions = EthereumTransaction.objects.filter(Q(from_address=wallet.address) | Q(to_address=wallet.address))
+
+    # Extract necessary features from the transactions
+    transactions_df = pd.DataFrame(list(transactions.values('value', 'gas', 'gas_price', 'nonce', 'cumulative_gas_used', 'gas_used')))
+
+    # Feature Engineering: Add any necessary interaction terms
+    transactions_df['Gas_Used_Ratio'] = transactions_df['gas_used'] / (transactions_df['gas'] + 1)
+    transactions_df['Value_Gas_Ratio'] = transactions_df['value'] / (transactions_df['gas'] + 1)
+
+    # Align the DataFrame with the model's expected features
+    transactions_df = transactions_df.reindex(columns=transaction_features, fill_value=0)
+
+    # Perform predictions for each transaction
+    transaction_predictions = transaction_model.predict(transactions_df)
+
+    # Get indices of transactions detected as money laundering
+    money_laundering_detected_indices = transactions_df.index[transaction_predictions == 1].tolist()
+
+    # Calculate the total number of transactions analyzed
+    total_transactions_analyzed = len(transactions_df)
+
+    # Optionally save the analysis result as before
+    CompletedAnalysis.objects.update_or_create(
+        wallet_analysis=wallet_analysis,
+        name='Transaction Money Laundering Detection',
+        defaults={
+            'note': f'Money laundering detected in {len(money_laundering_detected_indices)} out of {total_transactions_analyzed} transactions',
+            'concluded_happened': (len(money_laundering_detected_indices) > 0)
+        }
+    )
+
+    return money_laundering_detected_indices
+
+
+def run_erc20_moneyLaundering_model_analysis(wallet_analysis):
+    erc20_model, erc20_features = load_moneyLaundering_erc20_model()
+
+    wallet = wallet_analysis.wallet
+
+    # Retrieve ERC20 transactions for the wallet
+    erc20_transactions = ERC20Transaction.objects.filter(Q(from_address=wallet.address) | Q(to_address=wallet.address))
+
+    # Extract necessary features from the transactions
+    erc20_df = pd.DataFrame(list(erc20_transactions.values(
+        'value', 
+        'gas', 
+        'gas_price',
+        'gas_used',
+        'cumulative_gas_used',
+        'nonce', 
+        'transaction_index',
+        'confirmations'
+    )))
+
+    # Feature Engineering: Add any necessary interaction terms
+    erc20_df['Gas_Used_Ratio'] = erc20_df['gas_used'] / (erc20_df['gas'] + 1)
+    erc20_df['Value_Gas_Ratio'] = erc20_df['value'] / (erc20_df['gas'] + 1)
+    erc20_df['Transaction_Value_Efficiency'] = erc20_df['value'] / (erc20_df['cumulative_gas_used'] + 1)
+
+    # Align the DataFrame with the model's expected features
+    erc20_df = erc20_df.reindex(columns=erc20_features, fill_value=0)
+
+    # Perform predictions for each ERC20 transaction
+    erc20_predictions = erc20_model.predict(erc20_df)
+
+    # Get indices of ERC20 transactions detected as money laundering
+    money_laundering_detected_indices = erc20_df.index[erc20_predictions == 1].tolist()
+
+    # Calculate the total number of transactions analyzed
+    total_transactions_analyzed = len(erc20_df)
+
+    # Optionally save the analysis result as before
+    CompletedAnalysis.objects.update_or_create(
+        wallet_analysis=wallet_analysis,
+        name='ERC20 Money Laundering Detection',
+        defaults={
+            'note': f'Money laundering detected in {len(money_laundering_detected_indices)} out of {total_transactions_analyzed} ERC20 transactions',
+            'concluded_happened': (len(money_laundering_detected_indices) > 0)
+        }
+    )
+
+    return money_laundering_detected_indices

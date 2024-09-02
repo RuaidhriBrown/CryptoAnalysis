@@ -1,0 +1,56 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<h1>Transaction Analysis Results for <a href="{% url 'wallet_details' wallet.address %}">{{ wallet.address }}</a></h1>
+
+<!-- Filter options -->
+<div class="filter-options">
+    <a href="?filter_type=all">All Transactions</a> |
+    <a href="?filter_type=phishing">Phishing Detected</a> |
+    <a href="?filter_type=money_laundering">Money Laundering Detected</a>
+</div>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Transaction Type</th>
+            <th>Other Party</th>
+            <th>Value</th>
+            <th>Phishing Detected</th>
+            <th>Money Laundering Detected</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for tx in transactions %}
+        <tr>
+            <td>{{ tx.transaction_type }}</td>
+            <td>
+                {% if tx.other_party %}
+                <a href="{% url 'wallet_details' tx.other_party %}">{{ tx.other_party }}</a>
+                {% else %}
+                N/A
+                {% endif %}
+            </td>
+            <td>{{ tx.value }}</td>
+            <td>{{ tx.phishing_detected|yesno:"Yes,No" }}</td>
+            <td>{{ tx.money_laundering_detected|yesno:"Yes,No" }}</td>
+        </tr>
+        {% endfor %}
+        {% for erc20_tx in erc20_transactions %}
+        <tr>
+            <td>{{ erc20_tx.transaction_type }}</td>
+            <td>
+                {% if erc20_tx.other_party %}
+                <a href="{% url 'wallet_details' erc20_tx.other_party %}">{{ erc20_tx.other_party }}</a>
+                {% else %}
+                N/A
+                {% endif %}
+            </td>
+            <td>{{ erc20_tx.value }}</td>
+            <td>{{ erc20_tx.phishing_detected|yesno:"Yes,No" }}</td>
+            <td>{{ erc20_tx.money_laundering_detected|yesno:"Yes,No" }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

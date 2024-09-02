@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 from sklearn.model_selection import train_test_split, ParameterGrid, cross_val_score
 from sklearn.ensemble import RandomForestClassifier
@@ -66,7 +67,7 @@ feature_importances = pd.Series(rf_selector.feature_importances_, index=transact
 top_features = feature_importances.nlargest(10).index.tolist()
 
 # Save the top features used during training
-joblib.dump(top_features, 'random_forest_moneyLaundering_detector_er20_features.pkl')
+joblib.dump(top_features, os.path.join('results', 'random_forest_moneyLaundering_detector_er20_features.pkl'))
 
 # Apply SMOTE only on the training data
 print("Applying SMOTE to balance the training data...")
@@ -104,9 +105,7 @@ rf_model = RandomForestClassifier(**best_params, random_state=42, n_jobs=-1, cla
 rf_model.fit(X_train_resampled, y_train_resampled)
 
 # Save the trained model
-model_filename = 'random_forest_moneyLaundering_detector_er20.pkl'
-joblib.dump(rf_model, model_filename)
-print(f"Model saved to {model_filename}")
+joblib.dump(rf_model, os.path.join('results', 'random_forest_moneyLaundering_detector_er20.pkl'))
 
 # Predict on the balanced test data
 print("Predicting on the test dataset...")

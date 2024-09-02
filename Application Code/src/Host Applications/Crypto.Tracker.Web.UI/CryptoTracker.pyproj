@@ -30,12 +30,19 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="create_superuser.py" />
+    <Compile Include="CryptoTracker\create_superuser.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="manage.py" />
     <Compile Include="CryptoTracker\__init__.py" />
     <Compile Include="CryptoTracker\settings.py" />
     <Compile Include="CryptoTracker\urls.py" />
     <Compile Include="CryptoTracker\wsgi.py" />
     <Compile Include="webview\analysis.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="webview\management\commands\createsuperuser_if_none.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="webview\model_loader.py">
@@ -62,19 +69,26 @@
     <Compile Include="webview\__init__.py" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="models\ethereum\moneyLaundering\random_forest_phishing_detector_aggregated.pkl" />
-    <Content Include="models\ethereum\moneyLaundering\random_forest_phishing_detector_aggregated_features.pkl" />
-    <Content Include="models\ethereum\moneyLaundering\random_forest_phishing_detector_erc20.pkl" />
-    <Content Include="models\ethereum\moneyLaundering\random_forest_phishing_detector_erc20_features.pkl" />
-    <Content Include="models\ethereum\moneyLaundering\random_forest_phishing_detector_transactions.pkl" />
-    <Content Include="models\ethereum\moneyLaundering\random_forest_phishing_detector_transactions_features.pkl" />
+    <Content Include="init.sql" />
+    <Content Include="models\ethereum\moneyLaundering\random_forest_moneyLaundering_detector_aggregated.pkl" />
+    <Content Include="models\ethereum\moneyLaundering\random_forest_moneyLaundering_detector_aggregated_features.pkl" />
+    <Content Include="models\ethereum\moneyLaundering\random_forest_moneyLaundering_detector_er20.pkl" />
+    <Content Include="models\ethereum\moneyLaundering\random_forest_moneyLaundering_detector_er20_features.pkl" />
+    <Content Include="models\ethereum\moneyLaundering\random_forest_moneyLaundering_detector_transactions.pkl" />
+    <Content Include="models\ethereum\moneyLaundering\random_forest_moneyLaundering_detector_transactions_features.pkl" />
+    <Content Include="models\ethereum\phishing\random_forest_phishing_detector_erc20.pkl" />
+    <Content Include="models\ethereum\phishing\random_forest_phishing_detector_transactions.pkl" />
+    <Content Include="models\ethereum\phishing\random_forest_phishing_detector_transactions_features.pkl" />
     <Content Include="models\ethereum\phishing\random_forest_phishing_detector_aggregated.pkl" />
     <Content Include="models\ethereum\phishing\random_forest_phishing_detector_aggregated_features.pkl" />
+    <Content Include="models\ethereum\phishing\random_forest_phishing_detector_erc20_features.pkl" />
     <Content Include="requirements.txt" />
     <Content Include="webview\static\css\styles.css" />
     <Content Include="webview\static\images\Logo.png" />
     <Content Include="webview\static\js\myJS.js" />
     <Content Include="webview\templates\cfdg-view.html" />
+    <Content Include="webview\templates\ether_wallet\_export.html" />
+    <Content Include="webview\templates\ether_wallet\wallet_transaction_analysis_results.html" />
     <Content Include="webview\templates\ether_wallet\_analysis.html" />
     <Content Include="webview\templates\ether_wallet\_erc20_transactions.html" />
     <Content Include="webview\templates\ether_wallet\_ethereum_transactions.html" />
@@ -103,7 +117,9 @@
     <Folder Include="models\ethereum\ransomeware\" />
     <Folder Include="models\ethereum\phishing\" />
     <Folder Include="webview\" />
+    <Folder Include="webview\management\commands\" />
     <Folder Include="webview\migrations\" />
+    <Folder Include="webview\management\" />
     <Folder Include="webview\static\" />
     <Folder Include="webview\static\images\" />
     <Folder Include="webview\templates\" />

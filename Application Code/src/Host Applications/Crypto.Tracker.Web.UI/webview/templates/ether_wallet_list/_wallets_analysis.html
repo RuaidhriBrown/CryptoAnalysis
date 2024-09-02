@@ -27,31 +27,6 @@
     <p>The phishing detection process involves using both basic ML methods and advanced GNNs to detect suspicious accounts on the Ethereum blockchain.</p>
     <ul>
         <li>
-            Basic ML Methods: Process the Aggregated Wallet, Ethereum Transactions, and ERC20 Transactions datasets using standard machine learning techniques.
-            <button type="button" class="btn btn-secondary btn-sm run-analysis" data-analysis-type="basic_ml_methods">Run</button>
-        </li>
-        <li>
-            Graph-Based Detection: Use graph classification where nodes are accounts and edges are transactions.
-            <button type="button" class="btn btn-secondary btn-sm run-analysis" data-analysis-type="graph_based_detection">Run</button>
-        </li>
-        <li>
-            End-to-End Learning with PDGNN: Implement PDGNN to extract features and classify phishing accounts.
-            <button type="button" class="btn btn-secondary btn-sm run-analysis" data-analysis-type="pdgnn">Run</button>
-        </li>
-        <li>
-            Lightweight Network Construction: Use BFS and random walk-based sampling to construct transaction networks.
-            <button type="button" class="btn btn-secondary btn-sm run-analysis" data-analysis-type="lightweight_network_construction">Run</button>
-        </li>
-        <li>
-            Subgraph Sampling and Pooling: Focus on phishing-relevant subgraphs with pooling strategies.
-            <button type="button" class="btn btn-secondary btn-sm run-analysis" data-analysis-type="subgraph_sampling">Run</button>
-        </li>
-        <li>
-            Comparative Analysis with Baseline Methods: Compare PDGNN performance with baseline methods like DeepWalk and Node2Vec.
-            <button type="button" class="btn btn-secondary btn-sm run-analysis" data-analysis-type="comparative_analysis">Run</button>
-        </li>
-        <!-- New Option to Run Phishing Detection Across All Wallets -->
-        <li>
             Phishing Detection Across All Wallets
             <button type="button" class="btn btn-danger btn-sm run-analysis" id="run-phishing-all-wallets">Run</button>
         </li>
@@ -64,24 +39,8 @@
     <p>The money laundering detection methodology includes analyzing wallet behaviors and transaction patterns that are typical in laundering activities.</p>
     <ul>
         <li>
-            Aggregated Wallet Analysis: Identify suspicious wallets based on the total Ether received, Ether sent, and unique addresses involved.
-            <button type="button" class="btn btn-secondary btn-sm run-analysis" data-analysis-type="aggregated_wallet_analysis">Run</button>
-        </li>
-        <li>
-            Fast-In Fast-Out (FIFO) Ratio: Identify wallets that quickly transfer out received funds, a common tactic in laundering.
-            <button type="button" class="btn btn-secondary btn-sm run-analysis" data-analysis-type="fifo_ratio_analysis">Run</button>
-        </li>
-        <li>
-            Small-Volume Transactions: Focus on wallets with numerous small transactions to evade detection.
-            <button type="button" class="btn btn-secondary btn-sm run-analysis" data-analysis-type="small_volume_transactions">Run</button>
-        </li>
-        <li>
-            Dense Transaction Networks: Detect networks of transactions between limited wallets, suggesting coordinated laundering.
-            <button type="button" class="btn btn-secondary btn-sm run-analysis" data-analysis-type="dense_network_analysis">Run</button>
-        </li>
-        <li>
-            ERC20 Token Analysis: Examine token transfers for signs of laundering, such as diversity of tokens and gas efficiency.
-            <button type="button" class="btn btn-secondary btn-sm run-analysis" data-analysis-type="erc20_token_analysis">Run</button>
+            Money Laundering Detection Across All Wallets
+            <button type="button" class="btn btn-danger btn-sm run-analysis" id="run-moneyLaundering-all-wallets">Run</button>
         </li>
     </ul>
 </div>

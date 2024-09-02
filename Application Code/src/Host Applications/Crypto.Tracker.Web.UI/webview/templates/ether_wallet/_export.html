@@ -1,0 +1,17 @@
+<div class="container">
+    <h2>Wallet Export</h2>
+    <form method="post" action="{% url 'export_wallet_data' wallet_id=wallet.id %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="data_type">Select Data Type to Export:</label>
+            <select name="data_type" id="data_type" class="form-control">
+                <option value="completed_analysis">Completed Analysis</option>
+                <option value="wallet_notes">Wallet Notes</option>
+                <option value="wallet_analysis">Wallet Analysis</option>
+                <option value="ethereum_transactions">Ethereum Transactions</option>
+                <option value="erc20_transactions">ERC20 Transactions</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Export to CSV</button>
+    </form>
+</div>

@@ -129,6 +129,8 @@ LOGIN_REDIRECT_URL = 'home'
 # Etherscan API key configuration
 ETHERSCAN_API_KEY = os.getenv("ETHERSCAN_API_KEY", "your-default-api-key")
 
+DEBUG = True
+
 # Logging configuration (useful for debugging)
 LOGGING = {
     'version': 1,

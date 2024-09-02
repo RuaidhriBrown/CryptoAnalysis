@@ -27,21 +27,26 @@ urlpatterns = [
     path('wallets/<int:wallet_id>/update_analysis/', views.update_wallet_analysis, name='update_wallet_analysis'),
     path('wallets/<int:wallet_id>/add_note/', views.add_wallet_note, name='add_wallet_note'),
     
+    path('wallet/<int:wallet_id>/export/', views.export_wallet_data, name='export_wallet_data'),
+    path('wallet-analysis/<int:analysis_id>/hash/', views.hash_wallet_analysis, name='hash_wallet_analysis'),
+
     path('wallet/<int:wallet_id>/transaction-analysis/', views.transaction_analysis_results, name='transaction_analysis_results'),
 
+    #   Phishing
     path('wallets/<int:wallet_id>/run_phishing_analysis_w_wallet/', views.run_phishing_detection_W_wallets, name='run_phishing_analysis_wallet'),
     path('wallets/<int:wallet_id>/run_phishing_analysis_W_transactions/', views.run_phishing_detection_W_transactions, name='run_phishing_analysis_transactions'),
     path('wallets/<int:wallet_id>/run_phishing_analysis_W_er20s/', views.run_phishing_detection_W_ER20, name='run_phishing_analysis_er20'),
     
+    #   Money Laundering
     path('wallets/<int:wallet_id>/run_moneyLaundering_analysis_w_wallet/', views.run_moneyLaundering_detection_W_wallets, name='run_moneyLaundering_analysis_wallet'),
     path('wallets/<int:wallet_id>/run_moneyLaundering_analysis_W_transactions/', views.run_moneyLaundering_detection_W_transactions, name='run_moneyLaundering_analysis_transactions'),
     path('wallets/<int:wallet_id>/run_moneyLaundering_analysis_W_er20s/', views.run_moneyLaundering_detection_W_ER20, name='run_moneyLaundering_analysis_er20'),
 
     path('wallets/<int:wallet_id>/run_Money_Laundering_detection/', views.run_Money_Laundering_detection, name='run_Money_Laundering_detection'),
 
-    
+    #   All wallets Analysis
     path('run_phishing_analysis_all_wallets/', views.run_phishing_detection_all_wallets, name='run_phishing_analysis_all_wallets'),
-    
+    path('run_moneyLaundering_detection_all_wallets/', views.run_moneyLaundering_detection_all_wallets, name='run-moneyLaundering-all-wallets'),
 ]
 
 if settings.DEBUG:

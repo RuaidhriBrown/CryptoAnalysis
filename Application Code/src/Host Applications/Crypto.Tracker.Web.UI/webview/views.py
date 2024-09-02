@@ -1,10 +1,11 @@
 import logging
 import pandas as pd
+import csv
 
 logger = logging.getLogger(__name__)
 
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, Min, Max, Count, Prefetch
@@ -19,6 +20,8 @@ from datetime import datetime
 
 from .models import Wallet, WalletAnalysis
 from .analysis import run_wallet_phishing_model_analysis, run_transaction_phishing_model_analysis, run_erc20_phishing_model_analysis, analyze_wallet_for_Money_Laundering, run_wallet_moneyLaundering_model_analysis, run_transaction_moneyLaundering_model_analysis, run_erc20_moneyLaundering_model_analysis
+
+from .utils import generate_wallet_analysis_hash
 
 def index(request):
     return render(request, 'index.html')
@@ -584,6 +587,20 @@ def run_phishing_detection_all_wallets(request):
         return JsonResponse({'status': 'completed'})
     return JsonResponse({'status': 'failed'})
 
+@login_required
+def run_moneyLaundering_detection_all_wallets(request):
+    if request.method == 'POST':
+        wallets = Wallet.objects.all()
+        for wallet in wallets:
+            # Ensure a WalletAnalysis exists for each wallet
+            wallet_analysis, created = WalletAnalysis.objects.get_or_create(wallet=wallet, defaults={'user_profile': request.user.userprofile})
+            
+            # Run phishing analysis for the wallet
+            run_wallet_moneyLaundering_model_analysis(wallet_analysis)
+        
+        return JsonResponse({'status': 'completed'})
+    return JsonResponse({'status': 'failed'})
+
 
 @login_required
 def transaction_analysis_results(request, wallet_id):
@@ -647,4 +664,147 @@ def transaction_analysis_results(request, wallet_id):
         'transactions': transactions_df.to_dict('records'),
         'erc20_transactions': erc20_transactions_df.to_dict('records'),
         'filter_type': filter_type
+    })
+
+
+@login_required
+def export_wallet_data(request, wallet_id):
+    if request.method == 'POST':
+        # Fetch the wallet object using the provided wallet_id
+        wallet = Wallet.objects.get(id=wallet_id)
+        wallet_address = wallet.address  # Get the address of the wallet
+        
+        data_type = request.POST.get('data_type')
+        
+        # Set up the HttpResponse object with CSV header
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = f'attachment; filename="{data_type}_export.csv"'
+        
+        writer = csv.writer(response)
+
+        # Export data based on selected data type
+        if data_type == 'completed_analysis':
+            writer.writerow(['Wallet Analysis ID', 'Name', 'Note', 'Completed At', 'Concluded Happened'])
+            for analysis in CompletedAnalysis.objects.filter(wallet_analysis__wallet__id=wallet_id):
+                writer.writerow([
+                    analysis.wallet_analysis.id,
+                    analysis.name,
+                    analysis.note,
+                    analysis.completed_at,
+                    analysis.concluded_happened
+                ])
+        
+        elif data_type == 'wallet_notes':
+            writer.writerow(['Analysis ID', 'User', 'Content', 'Created At', 'Updated At', 'Note Type'])
+            for note in WalletNote.objects.filter(analysis__wallet__id=wallet_id):
+                writer.writerow([
+                    note.analysis.id,
+                    note.user.username if note.user else '',
+                    note.content,
+                    note.created_at,
+                    note.updated_at,
+                    note.get_note_type_display()
+                ])
+        
+        elif data_type == 'wallet_analysis':
+            writer.writerow(['Wallet ID', 'User Profile', 'Owner', 'Tag', 'Believed Illicit Count',
+                             'Believed Illicit', 'Confirmed Illicit', 'Believed Crime', 'Last Analyzed', 'Updating Note'])
+            for analysis in WalletAnalysis.objects.filter(wallet__id=wallet_id):
+                writer.writerow([
+                    analysis.wallet.id,
+                    analysis.user_profile.user.username,
+                    analysis.owner,
+                    analysis.tag,
+                    analysis.believed_illicit_count,
+                    analysis.believed_illicit,
+                    analysis.confirmed_illicit,
+                    analysis.believed_crime,
+                    analysis.last_analyzed,
+                    analysis.updating_note
+                ])
+        
+        elif data_type == 'ethereum_transactions':
+            # Correctly filter transactions using the wallet address
+            writer.writerow(['Block Number', 'Timestamp', 'Hash', 'Nonce', 'Block Hash', 'Transaction Index',
+                             'From Address', 'To Address', 'Value', 'Gas', 'Gas Price', 'Is Error', 'Tx Receipt Status',
+                             'Input', 'Contract Address', 'Cumulative Gas Used', 'Gas Used', 'Confirmations', 'Method ID',
+                             'Function Name', 'Address', 'Last Updated'])
+            for transaction in EthereumTransaction.objects.filter(Q(from_address=wallet_address) | Q(to_address=wallet_address)):
+                writer.writerow([
+                    transaction.block_number,
+                    transaction.timestamp,
+                    transaction.hash,
+                    transaction.nonce,
+                    transaction.block_hash,
+                    transaction.transaction_index,
+                    transaction.from_address,
+                    transaction.to_address,
+                    transaction.value,
+                    transaction.gas,
+                    transaction.gas_price,
+                    transaction.is_error,
+                    transaction.txreceipt_status,
+                    transaction.input,
+                    transaction.contract_address,
+                    transaction.cumulative_gas_used,
+                    transaction.gas_used,
+                    transaction.confirmations,
+                    transaction.method_id,
+                    transaction.function_name,
+                    transaction.address,
+                    transaction.last_updated
+                ])
+        
+        elif data_type == 'erc20_transactions':
+            # Correctly filter transactions using the wallet address
+            writer.writerow(['Composite ID', 'Block Number', 'Timestamp', 'Hash', 'Nonce', 'Block Hash',
+                             'From Address', 'Contract Address', 'To Address', 'Value', 'Token Name', 'Token Decimal',
+                             'Transaction Index', 'Gas', 'Gas Price', 'Gas Used', 'Cumulative Gas Used', 'Input',
+                             'Confirmations', 'Address', 'Last Updated'])
+            for transaction in ERC20Transaction.objects.filter(Q(from_address=wallet_address) | Q(to_address=wallet_address)):
+                writer.writerow([
+                    transaction.composite_id,
+                    transaction.block_number,
+                    transaction.timestamp,
+                    transaction.hash,
+                    transaction.nonce,
+                    transaction.block_hash,
+                    transaction.from_address,
+                    transaction.contract_address,
+                    transaction.to_address,
+                    transaction.value,
+                    transaction.token_name,
+                    transaction.token_decimal,
+                    transaction.transaction_index,
+                    transaction.gas,
+                    transaction.gas_price,
+                    transaction.gas_used,
+                    transaction.cumulative_gas_used,
+                    transaction.input,
+                    transaction.confirmations,
+                    transaction.address,
+                    transaction.last_updated
+                ])
+
+        return response
+
+    return redirect('wallet_details', wallet_id=wallet_address)
+
+
+@login_required
+def hash_wallet_analysis(request, analysis_id):
+    # Fetch the wallet analysis object
+    wallet_analysis = get_object_or_404(WalletAnalysis, id=analysis_id)
+    
+    # Generate the hash for the wallet analysis
+    wallet_analysis_hash = generate_wallet_analysis_hash(wallet_analysis)
+    
+    # Save the generated hash to the wallet analysis object
+    wallet_analysis.analysis_hash = wallet_analysis_hash
+    wallet_analysis.save(update_fields=['analysis_hash'])
+    
+    # Render the template with the wallet analysis and its hash
+    return render(request, 'ether_wallet/_analysis.html', {
+        'wallet_analysis': wallet_analysis,
+        'wallet_analysis_hash': wallet_analysis_hash
     })

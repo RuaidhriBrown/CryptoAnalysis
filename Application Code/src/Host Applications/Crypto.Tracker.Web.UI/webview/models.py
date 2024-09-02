@@ -145,6 +145,9 @@ class WalletAnalysis(models.Model):
     believed_crime = models.CharField(max_length=255, blank=True, null=True)
     last_analyzed = models.DateTimeField(blank=True, null=True)
     updating_note = models.TextField(blank=True, null=True)
+    
+    # New field for storing the hash
+    analysis_hash = models.CharField(max_length=64, blank=True, null=True)
 
     class Meta:
         db_table = 'dev_crypto_tracker"."wallet_analysis'

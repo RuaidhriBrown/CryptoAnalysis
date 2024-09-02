@@ -104,7 +104,7 @@ feature_importances = pd.Series(rf_selector.feature_importances_, index=transact
 top_features = feature_importances.nlargest(10).index.tolist()
 
 # Save the top features used during training
-joblib.dump(top_features, 'trained_feature_names.pkl')
+joblib.dump(top_features, '/results/random_forest_phishing_detector_aggregated_features.pkl')
 
 # Final NaN check before applying SMOTE
 if X_train[top_features].isna().sum().sum() > 0:
@@ -148,7 +148,7 @@ rf_model = RandomForestClassifier(**best_params, random_state=42, n_jobs=-1, cla
 rf_model.fit(X_train_resampled, y_train_resampled)
 
 # Save the trained model
-model_filename = 'random_forest_phishing_detector_aggregated.pkl'
+model_filename = '/results/random_forest_phishing_detector_aggregated.pkl'
 joblib.dump(rf_model, model_filename)
 print(f"Model saved to {model_filename}")
 

@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>2664c312-12cb-479e-be0d-a5cfc1296ba7</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>moneyLaundering\LR-machine learning wallets.py</StartupFile>
+    <StartupFile>write-word-doc.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -82,11 +82,9 @@
     <Compile Include="Phishing-ML\LR-machine learning wallets v3.py" />
     <Compile Include="Phishing-ML\testModel.py" />
     <Compile Include="Project___Testing.py" />
+    <Compile Include="write-word-doc.py" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="datasets\bitcoin\elliptic_txs_classes.csv" />
-    <Content Include="datasets\bitcoin\elliptic_txs_edgelist.csv" />
-    <Content Include="datasets\bitcoin\elliptic_txs_features.csv" />
     <Content Include="datasets\ethereum\analysis\analysis_summary_combined_er20.xlsx" />
     <Content Include="datasets\ethereum\analysis\analysis_summary_combined_transactions.xlsx" />
     <Content Include="datasets\ethereum\analysis\analysis_summary_transaction_dataset_even.xlsx" />
@@ -98,14 +96,6 @@
     <Content Include="datasets\ethereum\er20_collection\combined_er20_transaction_data.csv" />
     <Content Include="datasets\ethereum\er20_collection\combined_normal_transactions_data.csv" />
     <Content Include="datasets\ethereum\er20_collection\combined_transaction_data.csv" />
-    <Content Include="datasets\ethereum\er20_collection\Flag_0_erc20_transactions_0_1.csv" />
-    <Content Include="datasets\ethereum\er20_collection\Flag_0_erc20_transactions_0_99.csv" />
-    <Content Include="datasets\ethereum\er20_collection\Flag_0_erc20_transactions_100_599.csv" />
-    <Content Include="datasets\ethereum\er20_collection\Flag_0_erc20_transactions_1100_2178.csv" />
-    <Content Include="datasets\ethereum\er20_collection\Flag_0_erc20_transactions_2179.csv" />
-    <Content Include="datasets\ethereum\er20_collection\Flag_0_erc20_transactions_600_1099.csv" />
-    <Content Include="datasets\ethereum\er20_collection\Flag_1_erc20_transactions_0_999.csv" />
-    <Content Include="datasets\ethereum\er20_collection\Flag_1_erc20_transactions_1000_2179.csv" />
     <Content Include="datasets\ethereum\er20_collection\Money_Laundering_Wallets_List.csv" />
     <Content Include="datasets\ethereum\er20_collection\Money_Laundering_Wallets_List_with_Balances.csv" />
     <Content Include="datasets\ethereum\MoneyLaundering\all_erc20_transactions.csv" />
@@ -119,6 +109,11 @@
     <Content Include="datasets\ethereum\MoneyLaundering\combined_transaction_data.csv" />
     <Content Include="datasets\ethereum\MoneyLaundering\Money_Laundering_Wallets_List.csv" />
     <Content Include="datasets\ethereum\MoneyLaundering\Money_Laundering_Wallets_List_with_Balances.csv" />
+    <Content Include="datasets\ethereum\phishing\combined_er20.csv" />
+    <Content Include="datasets\ethereum\phishing\combined_phishing_transaction_data.csv" />
+    <Content Include="datasets\ethereum\phishing\combined_transactions.csv" />
+    <Content Include="datasets\ethereum\phishing\transaction_dataset-original.csv" />
+    <Content Include="datasets\ethereum\phishing\transaction_dataset_even.csv" />
     <Content Include="datasets\ethereum\transactions\Flag_0_erc20_transactions_0_9.csv" />
     <Content Include="datasets\ethereum\transactions\Flag_0_transactions_0_100.csv" />
     <Content Include="datasets\ethereum\transactions\Flag_0_transactions_101_201.csv" />
@@ -136,6 +131,7 @@
     <Content Include="datasets\ethereum\transaction_dataset_even.csv" />
     <Content Include="data\account_collection\transactions_0_100.csv" />
     <Content Include="data\account_collection\transactions_first_10.csv" />
+    <Content Include="requirements.txt" />
     <Content Include="results\random_forest_moneyLaundering_detector_aggregated.pkl" />
     <Content Include="results\random_forest_moneyLaundering_detector_aggregated_features.pkl" />
     <Content Include="results\random_forest_moneyLaundering_detector_er20.pkl" />
@@ -160,6 +156,7 @@
     <Folder Include="datasets\ethereum\er20_collection\" />
     <Folder Include="datasets\ethereum\MoneyLaundering\" />
     <Folder Include="datasets\ethereum\MoneyLaundering\analysis\" />
+    <Folder Include="datasets\ethereum\phishing\" />
     <Folder Include="datasets\ethereum\transactions\" />
     <Folder Include="moneyLaundering\combine\" />
     <Folder Include="moneyLaundering\fetch_data\" />

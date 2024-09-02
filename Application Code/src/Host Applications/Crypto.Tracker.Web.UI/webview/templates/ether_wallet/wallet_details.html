@@ -27,10 +27,13 @@ Wallet for {{ address }}
             <a class="nav-link" id="update-tab" data-toggle="tab" href="#update" role="tab" aria-controls="update" aria-selected="false">Update Datasets</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" id="analysis-tab" data-toggle="tab" href="#analysis" role="tab" aria-controls="analysis" aria-selected="false">Analysis</a>
+            <a class="nav-link" id="export-tab" data-toggle="tab" href="#export" role="tab" aria-controls="export" aria-selected="false">Export</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" id="linked-wallets-tab" data-toggle="tab" href="#linked-wallets" role="tab" aria-controls="linked-wallets" aria-selected="false">Linked Wallets</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="hash_wallet-tab" data-toggle="tab" href="#hash_wallet" role="tab" aria-controls="hash_wallet" aria-selected="false">hash wallet</a>
         </li>
     </ul>
     <div class="tab-content" id="myTabContent">
@@ -63,8 +66,8 @@ Wallet for {{ address }}
             </form>
             <p>Expected Time to Complete: {{ expected_time }} seconds</p>
         </div>
-        <div class="tab-pane fade" id="analysis" role="tabpanel" aria-labelledby="analysis-tab">
-            {% include 'ether_wallet/_analysis.html' %}
+        <div class="tab-pane fade" id="export" role="tabpanel" aria-labelledby="export-tab">
+            {% include 'ether_wallet/_export.html' %}
         </div>
         <div class="tab-pane fade" id="linked-wallets" role="tabpanel" aria-labelledby="linked-wallets-tab">
             <h2>Linked Wallets</h2>
@@ -73,6 +76,9 @@ Wallet for {{ address }}
                 <li><a href="{% url 'wallet_details' linked_wallet %}">{{ linked_wallet }}</a></li>
                 {% endfor %}
             </ul>
+        </div>
+        <div class="tab-pane fade" id="hash_wallet" role="tabpanel" aria-labelledby="hash_wallet-tab">
+            {% include 'ether_wallet/_analysis.html' %}
         </div>
     </div>
 </div>

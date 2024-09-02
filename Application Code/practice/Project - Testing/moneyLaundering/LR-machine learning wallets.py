@@ -92,7 +92,7 @@ rus = RandomUnderSampler(random_state=42)
 X_test_balanced, y_test_balanced = rus.fit_resample(X_test, y_test)
 
 # Feature selection using RandomForest
-print("Training RandomForestClassifier for feature selection...")
+print("/results/Training RandomForestClassifier for feature selection...")
 rf_selector = RandomForestClassifier(n_estimators=100, random_state=42, n_jobs=-1)
 rf_selector.fit(X_train, y_train)
 
@@ -101,7 +101,7 @@ feature_importances = pd.Series(rf_selector.feature_importances_, index=transact
 top_features = feature_importances.nlargest(10).index.tolist()
 
 # Save the top features used during training
-joblib.dump(top_features, 'random_forest_moneyLaundering_detector_aggregated_features.pkl')
+joblib.dump(top_features, '/results/random_forest_moneyLaundering_detector_aggregated_features.pkl')
 
 # Final NaN check before applying SMOTE
 if X_train[top_features].isna().sum().sum() > 0:

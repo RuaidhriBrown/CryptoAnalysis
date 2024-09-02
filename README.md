@@ -25,6 +25,35 @@ The Crypto Analysis Tool aims to provide a comprehensive, automated solution for
 
 To set up a local development environment, use the provided Docker Compose configuration. This setup ensures all dependencies are correctly installed and the environment mirrors the production setting.
 
+Note: We highly recommend using Docker Compose for setting up the project, as it simplifies the process and ensures that the environment is consistent across different systems. Docker Compose automatically handles all configurations, including environment variables, database settings, and static files.
+
+You will still need to ensure the trained models are added to the models directory
+
+[Phishing Detection](#phishing-detection)
+[Money Laundering Detection](#money-laundering-detection)
+
+### Why Use Docker Compose?
+- Simplifies Configuration: Docker Compose manages all dependencies and configurations in a single file, eliminating the need for manual setup in settings.py.
+- Ensures Consistency: The Docker environment mirrors the production environment, reducing the risk of inconsistencies or errors.
+- Quick Setup: Set up the entire project environment with a single command.
+
+Note: the static files may not work in the docker-compose method
+
+### Steps to Start Local Development Using Docker Compose:
+1. **Clone the repository**:
+    git clone https://github.com/RuaidhriBrown/CryptoAnalysis.git
+    cd 'CryptoAnalysis\Application Code\src\Host Applications\Crypto.Tracker.Web.UI\'
+2. **Run Docker Compose to build and start the services**:
+    Run the following: docker-compose up --build
+    This command will build the Docker images and start the containers for the web application and the database. All configurations, including environment variables and database settings, are automatically managed by Docker Compose.
+3. **Access the Web Application**:
+    - Once the Docker containers are up and running, you can access the web application in your browser at http://localhost:8000.
+
+### Avoid Manual Configuration
+If you choose to use Docker Compose, you don't need to manually configure the settings.py file for environment-specific settings like SECRET_KEY, DEBUG, ALLOWED_HOSTS, or DATABASES. Docker Compose handles these settings through environment variables defined in the docker-compose.yml file.
+
+However, if you still prefer manual setup, please refer to the Web Application Configuration section below.
+
 ### Installing Requirements
 
 Before running the project, you need to install all the required Python packages for both the machine learning models and the web application.
@@ -48,20 +77,6 @@ Before running the project, you need to install all the required Python packages
     ```
     - Ensure that the requirements.txt file, which contains all necessary dependencies for running the Django web application, is located in the web application directory.
 Note: If you encounter any issues during installation, check that your Python version and pip are up to date. You may also need to install additional system dependencies if required by specific Python packages.
-
-
-### Steps to Start Local Development:
-
-1. Clone the repository:
-    ```bash
-    git clone https://github.com/RuaidhriBrown/CryptoAnalysis.git
-    cd CryptoAnalysis
-    ```
-2. Run Docker Compose to build and start the services:
-    ```bash
-    docker-compose up --build
-    ```
-
 
 ## Machine Learning Model Training
 
@@ -418,6 +433,7 @@ To manage your Django application through the admin interface, you need to creat
 6. **Access the Django Admin Interface**:
    - Open your web browser and go to `http://localhost:8000/admin`.
    - Log in using the admin credentials you just created.
+
 
 
 ## Univiersity of Buckingham

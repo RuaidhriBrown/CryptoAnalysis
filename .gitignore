@@ -380,3 +380,17 @@ MockEmisProxy/build_deploy_run.ps1
 /Application Code/practice/Project - Testing/results/random_forest_moneyLaundering_detector_aggregated_features.pkl
 /Application Code/src/Host Applications/Crypto.Tracker.Web.UI/models/ethereum/moneyLaundering/random_forest_moneyLaundering_detector_aggregated.pkl
 /Application Code/src/Host Applications/Crypto.Tracker.Web.UI/models/ethereum/moneyLaundering/random_forest_moneyLaundering_detector_aggregated_features.pkl
+/Application Code/src/Host Applications/Crypto.Tracker.Web.UI/media/plots/0x63042ba8b18ead6df6bdf8ee0f289706a401720b_day_of_week.png
+/Application Code/src/Host Applications/Crypto.Tracker.Web.UI/media/plots/0x63042ba8b18ead6df6bdf8ee0f289706a401720b_hourly.png
+/Application Code/src/Host Applications/Crypto.Tracker.Web.UI/media/plots/0x63042ba8b18ead6df6bdf8ee0f289706a401720b_monthly.png
+/Application Code/src/Host Applications/Crypto.Tracker.Web.UI/media/plots/0xd26114cd6ee289accf82350c8d8487fedb8a0c07_day_of_week.png
+/Application Code/src/Host Applications/Crypto.Tracker.Web.UI/media/plots/0xd26114cd6ee289accf82350c8d8487fedb8a0c07_hourly.png
+/Application Code/src/Host Applications/Crypto.Tracker.Web.UI/media/plots/0xd26114cd6ee289accf82350c8d8487fedb8a0c07_monthly.png
+/Application Code/src/Host Applications/Crypto.Tracker.Web.UI/media/plots/0xfbb1b73c4f0bda4f67dca266ce6ef42f520fbb98_day_of_week.png
+/Application Code/src/Host Applications/Crypto.Tracker.Web.UI/media/plots/0xfbb1b73c4f0bda4f67dca266ce6ef42f520fbb98_monthly.png
+/Application Code/practice/Project - Testing/datasets/ethereum/MoneyLaundering/combined_er20_transaction_data.csv
+/Application Code/practice/Project - Testing/datasets/ethereum/MoneyLaundering/combined_normal_transactions_data.csv
+/Application Code/practice/Project - Testing/datasets/ethereum/phishing/combined_er20.csv
+/Application Code/practice/Project - Testing/datasets/ethereum/phishing/combined_phishing_transaction_data.csv
+/Application Code/practice/Project - Testing/datasets/ethereum/phishing/combined_transactions.csv
+/Application Code/practice/Project - Testing/datasets/ethereum/phishing/transaction_dataset_even.csv

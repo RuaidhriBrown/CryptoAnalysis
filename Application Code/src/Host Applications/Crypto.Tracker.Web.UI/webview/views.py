@@ -1,4 +1,5 @@
 import logging
+import pandas as pd
 
 logger = logging.getLogger(__name__)
 
@@ -17,7 +18,7 @@ import json
 from datetime import datetime
 
 from .models import Wallet, WalletAnalysis
-from .analysis import run_wallet_phishing_analysis, run_transaction_phishing_analysis, run_erc20_phishing_analysis, analyze_wallet_for_Money_Laundering
+from .analysis import run_wallet_phishing_model_analysis, run_transaction_phishing_model_analysis, run_erc20_phishing_model_analysis, analyze_wallet_for_Money_Laundering, run_wallet_moneyLaundering_model_analysis, run_transaction_moneyLaundering_model_analysis, run_erc20_moneyLaundering_model_analysis
 
 def index(request):
     return render(request, 'index.html')
@@ -152,6 +153,45 @@ def run_analysis(request):
 
 @login_required
 def wallet_details(request, address):
+    # Fetch or create wallet
+    try:
+        wallet = Wallet.objects.get(address=address)
+    except Wallet.DoesNotExist:
+        # Fetch balance for the new wallet
+        balance_response = get_balance(address)
+        balance = balance_response['balance'] if 'balance' in balance_response else 0
+
+        # Create a new wallet entry
+        wallet = Wallet.objects.create(
+            address=address,
+            balance=balance
+        )
+
+    # Fetch the last known block numbers for Ethereum and ERC20 transactions
+    last_eth_block_number = EthereumTransaction.objects.filter(
+        Q(from_address=address) | Q(to_address=address)
+    ).aggregate(Max('block_number'))['block_number__max'] or 0
+
+    last_erc20_block_number = ERC20Transaction.objects.filter(
+        Q(from_address=address) | Q(to_address=address)
+    ).aggregate(Max('block_number'))['block_number__max'] or 0
+
+    # Define the maximum number of transactions to add
+    MAX_TRANSACTIONS_TO_ADD = 100  # Change this number as needed
+
+    # Fetch and save Ethereum transactions for the wallet starting from the last known block
+    eth_transactions_response = get_transactions(address, startblock=last_eth_block_number + 1, limit=MAX_TRANSACTIONS_TO_ADD)
+    if eth_transactions_response.get('status') == '1':
+        eth_transactions = eth_transactions_response.get('result', [])[:MAX_TRANSACTIONS_TO_ADD]  # Limit transactions
+        save_ethereum_transactions(eth_transactions, address)
+
+    # Fetch and save ERC20 transactions for the wallet starting from the last known block
+    erc20_transactions_response = get_erc20_transactions(address, startblock=last_erc20_block_number + 1, limit=MAX_TRANSACTIONS_TO_ADD)
+    if erc20_transactions_response.get('status') == '1':
+        erc20_transactions = erc20_transactions_response.get('result', [])[:MAX_TRANSACTIONS_TO_ADD]  # Limit transactions
+        save_erc20_transactions(erc20_transactions, address)
+
+    # Retrieve transactions related to the wallet
     transactions = EthereumTransaction.objects.filter(Q(from_address=address) | Q(to_address=address)).order_by('-timestamp')
     erc20_transactions = ERC20Transaction.objects.filter(Q(from_address=address) | Q(to_address=address)).order_by('-timestamp')
     
@@ -164,23 +204,20 @@ def wallet_details(request, address):
     unique_addresses.discard(address)
     expected_time = (len(unique_addresses) * 2) * (2 / 5)
 
-    wallet = Wallet.objects.get(address=address)
-    
-    # Ensure the WalletAnalysis for the current user and wallet exists, fetch the existing one
-    try:
-        wallet_analysis = WalletAnalysis.objects.get(wallet=wallet, user_profile=request.user.userprofile)
-    except WalletAnalysis.DoesNotExist:
-        wallet_analysis = WalletAnalysis.objects.create(
-            wallet=wallet,
-            user_profile=request.user.userprofile,
-            owner=request.user.username,
-            tag='',
-            believed_illicit_count=0,
-            believed_illicit=False,
-            confirmed_illicit=False,
-            believed_crime='',
-            updating_note=''
-        )
+    # Ensure the WalletAnalysis for the current user and wallet exists
+    wallet_analysis, created = WalletAnalysis.objects.get_or_create(
+        wallet=wallet, 
+        user_profile=request.user.userprofile,
+        defaults={
+            'owner': request.user.username,
+            'tag': '',
+            'believed_illicit_count': 0,
+            'believed_illicit': False,
+            'confirmed_illicit': False,
+            'believed_crime': '',
+            'updating_note': ''
+        }
+    )
     
     # Fetch wallet analyses, notes, and completed analyses
     wallet_analyses = WalletAnalysis.objects.filter(wallet=wallet)
@@ -199,8 +236,8 @@ def wallet_details(request, address):
     wallet_stats = combine_data(address, transactions, erc20_transactions)
     total_erc20_transactions = wallet_stats['total_erc20_received'] + wallet_stats['total_erc20_sent']
     
-    last_ethereum_update = transactions.aggregate(last_updated=Min('last_updated'))['last_updated']
-    last_erc20_update = erc20_transactions.aggregate(last_updated=Min('last_updated'))['last_updated']
+    last_ethereum_update = transactions.aggregate(last_updated=Max('last_updated'))['last_updated']
+    last_erc20_update = erc20_transactions.aggregate(last_updated=Max('last_updated'))['last_updated']
     
     if last_ethereum_update and last_erc20_update:
         earliest_last_update = min(last_ethereum_update, last_erc20_update)
@@ -232,6 +269,88 @@ def wallet_details(request, address):
         'wallet_notes': wallet_notes,
         'completed_analyses': completed_analyses,
     })
+
+
+def save_ethereum_transactions(transactions, address):
+    """Saves Ethereum transactions to the database."""
+    for tx in transactions:
+        # Handle empty strings or missing values for txreceipt_status
+        txreceipt_status = tx.get('txreceipt_status', None)
+        if txreceipt_status == '':
+            txreceipt_status = None
+        else:
+            txreceipt_status = int(txreceipt_status)  # Ensure it's an integer
+
+        EthereumTransaction.objects.update_or_create(
+            hash=tx['hash'],
+            defaults={
+                'block_number': tx['blockNumber'],
+                'timestamp': datetime.fromtimestamp(int(tx['timeStamp'])),  # Corrected datetime usage
+                'nonce': tx['nonce'],
+                'block_hash': tx['blockHash'],
+                'transaction_index': tx['transactionIndex'],
+                'from_address': tx['from'],
+                'to_address': tx['to'],
+                'value': tx['value'],
+                'gas': tx['gas'],
+                'gas_price': tx['gasPrice'],
+                'is_error': tx['isError'],
+                'txreceipt_status': txreceipt_status,
+                'input': tx['input'],
+                'contract_address': tx.get('contractAddress', None),
+                'cumulative_gas_used': tx['cumulativeGasUsed'],
+                'gas_used': tx['gasUsed'],
+                'confirmations': tx['confirmations'],
+                'method_id': tx.get('methodId', ''),
+                'function_name': tx.get('functionName', ''),
+                'address': address,
+                'last_updated': timezone.now()
+            }
+        )
+
+
+def save_erc20_transactions(transactions, address):
+    """Saves ERC20 transactions to the database."""
+    
+    def safe_cast_to_bigint(value, field_name):
+        """Convert a value to an int and ensure it's within the bigint range."""
+        try:
+            value_int = int(value)
+            if -9223372036854775808 <= value_int <= 9223372036854775807:
+                return value_int
+            else:
+                raise ValueError(f"Value {value_int} for field '{field_name}' is out of range for bigint")
+        except (ValueError, TypeError) as e:
+            # Log the error or handle it as needed
+            print(f"Error converting value for '{field_name}' to bigint: {e}")
+            return None
+
+    for tx in transactions:
+        ERC20Transaction.objects.update_or_create(
+            composite_id=f"{tx['hash']}_{tx['from']}_{tx['to']}",
+            defaults={
+                'block_number': safe_cast_to_bigint(tx['blockNumber'], 'block_number'),
+                'timestamp': datetime.fromtimestamp(int(tx['timeStamp'])),  # Corrected datetime usage
+                'hash': tx['hash'],
+                'nonce': safe_cast_to_bigint(tx['nonce'], 'nonce'),
+                'block_hash': tx['blockHash'],
+                'from_address': tx['from'],
+                'contract_address': tx.get('contractAddress', None),
+                'to_address': tx['to'],
+                'value': safe_cast_to_bigint(tx['value'], 'value'),
+                'token_name': tx['tokenName'],
+                'token_decimal': safe_cast_to_bigint(tx['tokenDecimal'], 'token_decimal'),
+                'transaction_index': safe_cast_to_bigint(tx['transactionIndex'], 'transaction_index'),
+                'gas': safe_cast_to_bigint(tx['gas'], 'gas'),
+                'gas_price': safe_cast_to_bigint(tx['gasPrice'], 'gas_price'),
+                'gas_used': safe_cast_to_bigint(tx['gasUsed'], 'gas_used'),
+                'cumulative_gas_used': safe_cast_to_bigint(tx['cumulativeGasUsed'], 'cumulative_gas_used'),
+                'input': tx['input'],
+                'confirmations': safe_cast_to_bigint(tx['confirmations'], 'confirmations'),
+                'address': address,
+                'last_updated': timezone.now()
+            }
+        )
 
 
 
@@ -337,7 +456,7 @@ def run_phishing_detection_W_wallets(request, wallet_id):
 
     logger.debug(f'Running phishing analysis for wallet {wallet.address}')
     
-    phishing_detected = run_wallet_phishing_analysis(wallet_analysis)
+    phishing_detected = run_wallet_phishing_model_analysis(wallet_analysis)
     
     logger.debug(f'Phishing analysis completed for wallet {wallet.address}. Detected: {phishing_detected}')
 
@@ -350,7 +469,7 @@ def run_phishing_detection_W_transactions(request, wallet_id):
 
     logger.debug(f'Running transaction phishing analysis for wallet {wallet.address}')
     
-    phishing_detected = run_transaction_phishing_analysis(wallet_analysis)
+    phishing_detected = run_transaction_phishing_model_analysis(wallet_analysis)
     
     logger.debug(f'Transaction phishing analysis completed for wallet {wallet.address}. Detected: {phishing_detected}')
 
@@ -364,7 +483,7 @@ def run_phishing_detection_W_ER20(request, wallet_id):
 
     logger.debug(f'Running ERC20 phishing analysis for wallet {wallet.address}')
     
-    phishing_detected = run_erc20_phishing_analysis(wallet_analysis)
+    phishing_detected = run_erc20_phishing_model_analysis(wallet_analysis)
     
     logger.debug(f'ERC20 phishing analysis completed for wallet {wallet.address}. Detected: {phishing_detected}')
 
@@ -384,6 +503,46 @@ def run_Money_Laundering_detection(request, wallet_id):
 
     return redirect('wallet_details', address=wallet.address)
 
+@login_required
+def run_moneyLaundering_detection_W_wallets(request, wallet_id):
+    wallet = get_object_or_404(Wallet, id=wallet_id)
+    wallet_analysis, created = WalletAnalysis.objects.get_or_create(wallet=wallet, user_profile=request.user.userprofile)
+
+    logger.debug(f'Running Money laundering analysis for wallet {wallet.address}')
+    
+    moneyLaundering_detected = run_wallet_moneyLaundering_model_analysis(wallet_analysis)
+    
+    logger.debug(f'Money laundering analysis completed for wallet {wallet.address}. Detected: {moneyLaundering_detected}')
+
+    return redirect('wallet_details', address=wallet.address)
+
+@login_required
+def run_moneyLaundering_detection_W_transactions(request, wallet_id):
+    wallet = get_object_or_404(Wallet, id=wallet_id)
+    wallet_analysis, created = WalletAnalysis.objects.get_or_create(wallet=wallet, user_profile=request.user.userprofile)
+
+    logger.debug(f'Running transaction Money laundering analysis for wallet {wallet.address}')
+    
+    moneyLaundering_detected = run_transaction_moneyLaundering_model_analysis(wallet_analysis)
+    
+    logger.debug(f'Transaction Money laundering analysis completed for wallet {wallet.address}. Detected: {moneyLaundering_detected}')
+
+    return redirect('wallet_details', address=wallet.address)
+
+
+@login_required
+def run_moneyLaundering_detection_W_ER20(request, wallet_id):
+    wallet = get_object_or_404(Wallet, id=wallet_id)
+    wallet_analysis, created = WalletAnalysis.objects.get_or_create(wallet=wallet, user_profile=request.user.userprofile)
+
+    logger.debug(f'Running ERC20 Money laundering analysis for wallet {wallet.address}')
+    
+    moneyLaundering_detected = run_erc20_moneyLaundering_model_analysis(wallet_analysis)
+    
+    logger.debug(f'ERC20 Money laundering analysis completed for wallet {wallet.address}. Detected: {moneyLaundering_detected}')
+
+    return redirect('wallet_details', address=wallet.address)
+
 
 @login_required
 def run_phishing_detection_all_wallets(request):
@@ -394,7 +553,72 @@ def run_phishing_detection_all_wallets(request):
             wallet_analysis, created = WalletAnalysis.objects.get_or_create(wallet=wallet, defaults={'user_profile': request.user.userprofile})
             
             # Run phishing analysis for the wallet
-            run_wallet_phishing_analysis(wallet_analysis)
+            run_wallet_phishing_model_analysis(wallet_analysis)
         
         return JsonResponse({'status': 'completed'})
     return JsonResponse({'status': 'failed'})
+
+
+@login_required
+def transaction_analysis_results(request, wallet_id):
+    wallet = get_object_or_404(Wallet, id=wallet_id)
+    wallet_analysis, created = WalletAnalysis.objects.get_or_create(wallet=wallet, user_profile=request.user.userprofile)
+
+    # Retrieve filter type from GET parameters
+    filter_type = request.GET.get('filter_type', 'all')  # Default to 'all' if not specified
+
+    # Retrieve Ethereum transactions for the wallet
+    transactions = EthereumTransaction.objects.filter(Q(from_address=wallet.address) | Q(to_address=wallet.address)).order_by('-timestamp')
+    erc20_transactions = ERC20Transaction.objects.filter(Q(from_address=wallet.address) | Q(to_address=wallet.address)).order_by('-timestamp')
+
+    # Apply phishing and money laundering detection models
+    transaction_phishing_indices = run_transaction_phishing_model_analysis(wallet_analysis)
+    erc20_phishing_indices = run_erc20_phishing_model_analysis(wallet_analysis)
+    transaction_money_laundering_indices = run_transaction_moneyLaundering_model_analysis(wallet_analysis)
+    erc20_money_laundering_indices = run_erc20_moneyLaundering_model_analysis(wallet_analysis)
+
+    # Combine results into DataFrame for easy manipulation
+    transactions_df = pd.DataFrame(list(transactions.values()))
+    erc20_transactions_df = pd.DataFrame(list(erc20_transactions.values()))
+
+    # Add transaction type column
+    transactions_df['transaction_type'] = 'Normal'
+    erc20_transactions_df['transaction_type'] = 'ERC20'
+
+    # Initialize detection columns to False
+    transactions_df['phishing_detected'] = False
+    transactions_df['money_laundering_detected'] = False
+    erc20_transactions_df['phishing_detected'] = False
+    erc20_transactions_df['money_laundering_detected'] = False
+
+    # Set detected transactions to True using the indices
+    transactions_df.loc[transaction_phishing_indices, 'phishing_detected'] = True
+    transactions_df.loc[transaction_money_laundering_indices, 'money_laundering_detected'] = True
+    erc20_transactions_df.loc[erc20_phishing_indices, 'phishing_detected'] = True
+    erc20_transactions_df.loc[erc20_money_laundering_indices, 'money_laundering_detected'] = True
+
+    # Determine the other party in the transactions
+    if not transactions_df.empty:
+        transactions_df['other_party'] = transactions_df.apply(
+            lambda row: row['to_address'] if row['from_address'].lower() == wallet.address.lower() else row['from_address'], axis=1
+        )
+
+    if not erc20_transactions_df.empty:
+        erc20_transactions_df['other_party'] = erc20_transactions_df.apply(
+            lambda row: row['to_address'] if row['from_address'].lower() == wallet.address.lower() else row['from_address'], axis=1
+        )
+
+    # Filter transactions based on filter type if specified
+    if filter_type == 'phishing':
+        transactions_df = transactions_df[transactions_df['phishing_detected']]
+        erc20_transactions_df = erc20_transactions_df[erc20_transactions_df['phishing_detected']]
+    elif filter_type == 'money_laundering':
+        transactions_df = transactions_df[transactions_df['money_laundering_detected']]
+        erc20_transactions_df = erc20_transactions_df[erc20_transactions_df['money_laundering_detected']]
+
+    return render(request, 'ether_wallet/wallet_transaction_analysis_results.html', {
+        'wallet': wallet,
+        'transactions': transactions_df.to_dict('records'),
+        'erc20_transactions': erc20_transactions_df.to_dict('records'),
+        'filter_type': filter_type
+    })

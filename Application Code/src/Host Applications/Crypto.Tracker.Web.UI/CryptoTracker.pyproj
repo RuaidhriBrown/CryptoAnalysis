@@ -79,6 +79,7 @@
     <Content Include="webview\static\images\Logo.png" />
     <Content Include="webview\static\js\myJS.js" />
     <Content Include="webview\templates\cfdg-view.html" />
+    <Content Include="webview\templates\ether_wallet\wallet_transaction_analysis_results.html" />
     <Content Include="webview\templates\ether_wallet\_analysis.html" />
     <Content Include="webview\templates\ether_wallet\_erc20_transactions.html" />
     <Content Include="webview\templates\ether_wallet\_ethereum_transactions.html" />

@@ -27,10 +27,18 @@ urlpatterns = [
     path('wallets/<int:wallet_id>/update_analysis/', views.update_wallet_analysis, name='update_wallet_analysis'),
     path('wallets/<int:wallet_id>/add_note/', views.add_wallet_note, name='add_wallet_note'),
     
+    path('wallet/<int:wallet_id>/transaction-analysis/', views.transaction_analysis_results, name='transaction_analysis_results'),
+
     path('wallets/<int:wallet_id>/run_phishing_analysis_w_wallet/', views.run_phishing_detection_W_wallets, name='run_phishing_analysis_wallet'),
     path('wallets/<int:wallet_id>/run_phishing_analysis_W_transactions/', views.run_phishing_detection_W_transactions, name='run_phishing_analysis_transactions'),
     path('wallets/<int:wallet_id>/run_phishing_analysis_W_er20s/', views.run_phishing_detection_W_ER20, name='run_phishing_analysis_er20'),
+    
+    path('wallets/<int:wallet_id>/run_moneyLaundering_analysis_w_wallet/', views.run_moneyLaundering_detection_W_wallets, name='run_moneyLaundering_analysis_wallet'),
+    path('wallets/<int:wallet_id>/run_moneyLaundering_analysis_W_transactions/', views.run_moneyLaundering_detection_W_transactions, name='run_moneyLaundering_analysis_transactions'),
+    path('wallets/<int:wallet_id>/run_moneyLaundering_analysis_W_er20s/', views.run_moneyLaundering_detection_W_ER20, name='run_moneyLaundering_analysis_er20'),
+
     path('wallets/<int:wallet_id>/run_Money_Laundering_detection/', views.run_Money_Laundering_detection, name='run_Money_Laundering_detection'),
+
     
     path('run_phishing_analysis_all_wallets/', views.run_phishing_detection_all_wallets, name='run_phishing_analysis_all_wallets'),
     

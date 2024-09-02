@@ -9,11 +9,11 @@ from .models import EthereumTransaction, ERC20Transaction
 from .utils import convert_to_int
 import time
 
-def get_transactions(address, startblock):
+def get_transactions(address, startblock, limit=None):
     if not re.match(r'^0x[a-fA-F0-9]{40}$', address):
         return {'error': 'Invalid address format'}
+    
     url = "https://api.etherscan.io/api"
-
     api_key = settings.ETHERSCAN_API_KEY
 
     params = {
@@ -25,14 +25,17 @@ def get_transactions(address, startblock):
         "sort": "asc",
         "apikey": api_key
     }
+
+    if limit is not None:
+        params["offset"] = limit  # Limit number of transactions
+
     response = requests.get(url, params=params)
     if response.status_code == 200:
         return response.json()
     return {'error': 'Failed to fetch transactions'}
 
-def get_erc20_transactions(address, startblock):
+def get_erc20_transactions(address, startblock, limit=None):
     url = "https://api.etherscan.io/api"
-
     api_key = settings.ETHERSCAN_API_KEY
 
     params = {
@@ -44,6 +47,10 @@ def get_erc20_transactions(address, startblock):
         "sort": "asc",
         "apikey": api_key
     }
+
+    if limit is not None:
+        params["offset"] = limit  # Limit number of transactions
+
     response = requests.get(url, params=params)
     if response.status_code == 200:
         return response.json()

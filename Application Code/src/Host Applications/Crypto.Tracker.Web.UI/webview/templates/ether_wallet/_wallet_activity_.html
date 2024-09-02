@@ -101,8 +101,11 @@
         <div class="tab-pane fade" id="completed-analyses" role="tabpanel" aria-labelledby="completed-analyses-tab">
             <h3>Completed Automatic Analyses</h3>
 
+            <a href="{% url 'transaction_analysis_results' wallet.id %}" class="btn btn-secondary">View Detailed Transaction Analysis</a>
+
             <!-- Buttons to run various phishing and money laundering detection analyses -->
             <div class="mb-3">
+                <!-- Phishing Models -->
                 <form method="post" action="{% url 'run_phishing_analysis_wallet' wallet.id %}" style="display: inline;">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-warning">Run Wallet Phishing Detection</button>
@@ -118,7 +121,23 @@
                     <button type="submit" class="btn btn-warning">Run ERC20 Phishing Detection</button>
                 </form>
 
-                <!-- New button to run Money Laundering detection -->
+                <!-- Money Laundering Models -->
+                <form method="post" action="{% url 'run_moneyLaundering_analysis_wallet' wallet.id %}" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary">Run Wallet Money Laundering Detection</button>
+                </form>
+
+                <form method="post" action="{% url 'run_moneyLaundering_analysis_transactions' wallet.id %}" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary">Run Transaction Money Laundering Detection</button>
+                </form>
+
+                <form method="post" action="{% url 'run_moneyLaundering_analysis_er20' wallet.id %}" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary">Run ERC20 Money Laundering Detection</button>
+                </form>
+
+                <!-- button to run Money Laundering detection -->
                 <form method="post" action="{% url 'run_Money_Laundering_detection' wallet.id %}" style="display: inline;">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-danger">Run Money Laundering Detection</button>
